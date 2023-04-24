@@ -1,18 +1,17 @@
-// pages/index.js
-
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Index = () => {
 	const [posts, setPosts] = useState([]);
 
 	useEffect(() => {
-		async function fetchPosts() {
-			const res = await fetch("/api/posts");
-			const data = await res.json();
+		const fetchPost = async () => {
+			const { data } = await axios.get("http://localhost:5000/api/posts");
+			console.log("data", data);
 			setPosts(data);
-		}
-
-		fetchPosts();
+		};
+		fetchPost();
 	}, []);
 
 	return (
@@ -20,8 +19,9 @@ const Index = () => {
 			<h1>All Posts</h1>
 			<ul>
 				{posts.map((post) => (
-					<li key={post.id}>
-						<a href={`/posts/${post.id}`}>{post.title}</a>
+					<li key={post._id}>
+						<a href={`/posts?id=${post._id}`}>{post.title}</a>
+						<p>{post.content}</p>
 					</li>
 				))}
 			</ul>

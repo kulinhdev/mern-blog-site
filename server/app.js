@@ -1,10 +1,14 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const postRoutes = require("./routes/postRoutes");
 const connectToDatabase = require("./db/connect");
 const configs = require("./config/keys");
 
 const app = express();
+
+// Enable all CORS requests
+app.use(cors());
 
 // Connect to database
 connectToDatabase();
