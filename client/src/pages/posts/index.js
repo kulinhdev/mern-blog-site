@@ -7,7 +7,7 @@ const Index = () => {
 
 	useEffect(() => {
 		const fetchPost = async () => {
-			const { data } = await axios.get("http://localhost:5000/api/posts");
+			const { data } = await axios.get("http://localhost:5005/api/posts");
 			console.log("data", data);
 			setPosts(data);
 		};

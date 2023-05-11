@@ -37,9 +37,9 @@ app.get("*", (req, res) => {
 });
 
 const listen_port = configs.listenPort || 5000;
-// const expose_port = configs.exposePort || 5005;
+const expose_port = configs.exposePort || 5005;
 
 // Listen port from docker server
 app.listen(listen_port);
 
-console.log(`App is listening on port: http://localhost:${5000}`);
+console.log(`App is listening on port: http://localhost:${expose_port}`);

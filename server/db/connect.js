@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 // Define connection string
-const MONGO_URI = "mongodb://localhost:27017/mern-blog-site";
+const MONGO_URI = "mongodb://db:27017/mern-blog-site";
 
 // Connect to MongoDB
 // Define function to connect to MongoDB
