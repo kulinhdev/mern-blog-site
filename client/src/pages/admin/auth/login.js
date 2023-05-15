@@ -1,23 +1,80 @@
-import axios from "axios";
-import { useState } from "react";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { login } from "../../../utils/api";
+import { setTokensAdmin } from "../../../utils/common";
+import api from "../../../utils/api";
 
 function LoginPage() {
-	const [userName, setUserName] = useState("");
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const router = useRouter();
+
+	useEffect(() => {
+		const token = Cookies.get("refresh_token");
+
+		console.log("login check token ==> ", token, Cookies.get());
+
+		// Check token exists
+		if (router.pathname.startsWith("/admin") && token !== undefined) {
+			router.push("/admin");
+		}
+	}, [router]);
+
+	const handleLogin = async (email, password) => {
+		const response = await api.post("/api/auth/login", {
+			email,
+			password,
+		});
+		console.log("response ==> ", response);
+
+		if (response.status == 200) {
+			const { access_token, refresh_token } = response.data;
+
+			// Save tokens to cookies
+			setTokensAdmin(access_token, refresh_token);
+
+			// Display success message
+			Swal.fire({
+				position: "top-end",
+				icon: "success",
+				title: "Login Successful!",
+				showConfirmButton: false,
+				timer: 1500,
+			});
+
+			// Redirect to admin page
+			router.push("/admin");
+		} else {
+			setError(response.response.data.message);
+			// Display success message
+			Swal.fire({
+				icon: "error",
+				title: "Login failed!",
+				text: error,
+				confirmButtonColor: "#3085d6",
+				confirmButtonText: "OK",
+			});
+		}
+	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
 		try {
-			console.log(userName, password);
-			// await login(formData);
-			// router.push("/admin");
+			handleLogin(email, password);
 		} catch (error) {
-			console.error(error);
+			setError(error.response.data.message);
+			console.log(error);
+			// Display success message
+			Swal.fire({
+				icon: "error",
+				title: "Login failed!",
+				text: error.response.data.message,
+				confirmButtonColor: "#3085d6",
+				confirmButtonText: "OK",
+			});
 		}
 	};
 
@@ -59,22 +116,22 @@ function LoginPage() {
 						)}
 						<div>
 							<label
-								htmlFor="username"
+								htmlFor="email"
 								className="block text-sm font-medium text-gray-700"
 							>
-								UserName
+								Email
 							</label>
 							<div className="mt-1">
 								<input
-									id="userName"
-									name="userName"
-									type="text"
-									autoComplete="userName"
+									id="email"
+									name="email"
+									type="email"
+									autoComplete="email"
 									required
 									className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-stone-800"
-									value={userName}
+									value={email}
 									onChange={(event) =>
-										setUserName(event.target.value)
+										setEmail(event.target.value)
 									}
 								/>
 							</div>

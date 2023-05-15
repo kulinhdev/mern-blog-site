@@ -1,4 +1,4 @@
-import axios from "axios";
+import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -6,15 +6,15 @@ function AdminPage() {
 	const router = useRouter();
 
 	useEffect(() => {
-		const token = "token";
+		const token = Cookies.get("refresh_token");
 
-		if (router.pathname.startsWith("/admin") && !token) {
-			router.push("/admin/login");
+		console.log("admin check token ==> ", token);
+
+		// Check token doesn't exist
+		if (router.pathname.startsWith("/admin") && token === undefined) {
+			router.push("/admin/auth/login");
 		}
 	}, [router]);
-
-	// axios.defaults.headers.common["Authorization"] =
-	// 	localStorage.getItem("token");
 
 	return (
 		<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

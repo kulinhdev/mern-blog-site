@@ -10,7 +10,7 @@ const Post = () => {
 		console.log("router.query", router.query);
 		const fetchPost = async () => {
 			const { data } = await axios.get(
-				`http://localhost:5000/api/posts/${router.query.slug}`
+				`http://localhost:5005/api/posts/${router.query.slug}`
 			);
 			setPost(data);
 		};

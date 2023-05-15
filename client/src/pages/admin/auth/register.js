@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import api from "../../utils/api";
+import Swal from "sweetalert2";
+import api from "../../../utils/api";
+import { setTokensAdmin } from "../../../utils/common";
 
 function RegisterPage() {
 	const router = useRouter();
@@ -19,15 +21,34 @@ function RegisterPage() {
 	};
 
 	const handleRegister = async (formData) => {
-		try {
-			const response = await api.post("/api/auth/register", formData);
-			console.log("response", response);
+		const res = await api.post("/api/auth/register", formData);
+		const responseStatus = res.response.status;
+		const responseMessage = res.response.data.message;
+
+		if (responseStatus == 201) {
 			const { access_token, refresh_token } = response.data;
 
 			// Save tokens to cookies
-			setCookieTokens(access_token, refresh_token);
-		} catch (error) {
-			console.error(error.message);
+			setTokensAdmin(access_token, refresh_token);
+
+			// Display success message
+			Swal.fire({
+				position: "top-end",
+				icon: "success",
+				title: "Registration Successful!",
+				showConfirmButton: false,
+				timer: 1500,
+			});
+			router.push("/admin/auth/login");
+		} else {
+			// Display success message
+			Swal.fire({
+				position: "top-end",
+				icon: "error",
+				title: responseMessage,
+				showConfirmButton: false,
+				timer: 1500,
+			});
 		}
 	};
 
@@ -36,9 +57,17 @@ function RegisterPage() {
 
 		try {
 			await handleRegister(formData);
-			// router.push("/login");
 		} catch (error) {
-			console.error(error);
+			console.log(error);
+			setError(error.response.data.message);
+			// Display success message
+			Swal.fire({
+				icon: "error",
+				title: "Registration failed!",
+				text: error.response.data.message,
+				confirmButtonColor: "#3085d6",
+				confirmButtonText: "OK",
+			});
 		}
 	};
 

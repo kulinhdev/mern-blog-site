@@ -35,25 +35,25 @@ function generateRefreshToken(user) {
 }
 
 router.post("/register", async (req, res) => {
-	const { username, firstName, lastName, email, password } = req.body;
+	const { userName, firstName, lastName, email, password } = req.body;
 
 	try {
-		// Validate username and email is unique
+		// Validate userName and email is unique
 		const emailExists = await User.findOne({ email });
-		const usernameExists = await User.findOne({ username });
+		const userNameExists = await User.findOne({ userName });
 
 		if (emailExists) {
 			return res.status(400).json({ message: "Email already taken." });
 		}
 
-		if (usernameExists) {
+		if (userNameExists) {
 			return res.status(400).json({ message: "Username already taken." });
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 12);
 
 		const newUser = await User.create({
-			username,
+			userName,
 			firstName,
 			lastName,
 			email,
@@ -67,6 +67,8 @@ router.post("/register", async (req, res) => {
 		// Save refresh token to user document
 		newUser.token = refreshToken;
 		await newUser.save();
+
+		console.log({ user: newUser, access_token: accessToken });
 
 		res.status(201).json({
 			access_token: accessToken,
@@ -90,7 +92,9 @@ router.post("/login", async (req, res) => {
 		const existingUser = await User.findOne({ email });
 
 		if (!existingUser) {
-			return res.status(401).json({ error: "Invalid email or password" });
+			return res
+				.status(401)
+				.json({ message: "Invalid email or password" });
 		}
 
 		const isPasswordCorrect = await bcrypt.compare(
@@ -99,12 +103,14 @@ router.post("/login", async (req, res) => {
 		);
 
 		if (!isPasswordCorrect) {
-			return res.status(401).json({ error: "Invalid credentials." });
+			return res.status(401).json({ message: "Invalid credentials." });
 		}
 
 		// Generate access token and refresh token
 		const accessToken = generateAccessToken(existingUser);
 		const refreshToken = existingUser.token;
+
+		console.log({ user: existingUser, access_token: accessToken });
 
 		res.status(200).json({
 			access_token: accessToken,
@@ -112,7 +118,7 @@ router.post("/login", async (req, res) => {
 		});
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ error: error.message });
+		res.status(500).json({ message: error.message });
 	}
 });
 
@@ -122,10 +128,10 @@ router.post("/refresh-token", (req, res) => {
 	if (!refreshToken)
 		return res
 			.status(401)
-			.json({ error: "refresh_token must be fill ...!" });
+			.json({ message: "refresh_token must be fill ...!" });
 
 	jwt.verify(refreshToken, configs.JWTSecret, (error, user) => {
-		if (error) return res.status(403).json({ error: error.message });
+		if (error) return res.status(403).json({ message: error.message });
 		const accessToken = generateAccessToken(user);
 		res.status(200).json({ access_token: accessToken });
 	});

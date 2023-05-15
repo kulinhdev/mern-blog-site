@@ -1,5 +1,7 @@
 import Cookies from "js-cookie";
 import axios from "axios";
+import { setCookieTokens } from "../utils/common";
+import { useRouter } from "next/router";
 
 const baseURL = "http://localhost:5005";
 
@@ -7,19 +9,14 @@ const api = axios.create({
 	baseURL: baseURL,
 });
 
-function setCookieTokens(assetToken, refreshToken) {
-	// Set asset token in cookie with 1 hour expiry
-	Cookies.set("asset_token", assetToken, { expires: 1 / 24 });
-
-	// Set refresh token in cookie with 30 day expiry
-	Cookies.set("refresh_token", refreshToken, { expires: 30 });
-}
-
 async function updateAccessToken() {
+	// const router = useRouter();
+
 	try {
 		const refreshToken = Cookies.get("refresh_token");
 
 		if (!refreshToken) {
+			// router.push("/admin/auth.login");
 			throw new Error("Refresh token not found.");
 		}
 
@@ -36,7 +33,7 @@ async function updateAccessToken() {
 		return response.data.access_token;
 	} catch (error) {
 		// Redirect user to login page or perform other error handling
-		console.error(error);
+		console.log(error);
 	}
 }
 
@@ -58,11 +55,16 @@ api.interceptors.response.use(
 	async (error) => {
 		const originalRequest = error.config;
 
+		// Check if login request
+		if ((originalRequest.url = "/api/auth/login")) return error;
+
 		// Check if access token is expired
-		if (error.response.status === 401 && !originalRequest._retry) {
+		if (error.response?.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true;
 
 			const newAccessToken = await updateAccessToken();
+
+			console.log("newAccessToken ==> ", newAccessToken);
 
 			if (newAccessToken) {
 				// Resend original request with new access token
