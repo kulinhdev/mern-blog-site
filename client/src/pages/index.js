@@ -2,17 +2,21 @@ import Image from "next/image";
 
 export default function Home() {
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-between p-24">
-			<div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-				<Image
-					className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-					src="/next.svg"
-					alt="Next.js Logo"
-					width={180}
-					height={37}
-					priority
-				/>
+		<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+			<h1 className="text-3xl font-bold mb-6">Welcome to our Blog</h1>
+			<p className="mb-8">Hello world, I'm Linh</p>
+			<div className="flex items-center space-x-4">
+				<Link href="/login">
+					<a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+						Log in
+					</a>
+				</Link>
+				<Link href="/register">
+					<a className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+						Register
+					</a>
+				</Link>
 			</div>
-		</main>
+		</div>
 	);
 }

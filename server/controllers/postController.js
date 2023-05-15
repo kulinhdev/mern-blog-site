@@ -1,9 +1,23 @@
 const Post = require("../models/Post");
 
 async function getAllPosts(req, res) {
+	const page = req.query.page || 1;
+	const limit = 10;
+	const skip = (page - 1) * limit;
+	const searchTerm = req.query.title || "";
+
 	try {
-		const posts = await Post.find();
-		res.json(posts);
+		const count = await Post.countDocuments({
+			title: { $regex: searchTerm, $options: "i" },
+		});
+		const posts = await Post.find({
+			title: { $regex: searchTerm, $options: "i" },
+		})
+			.sort("-createdAt")
+			.skip(skip)
+			.limit(limit);
+
+		res.status(200).json({ count, posts });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
@@ -33,11 +47,9 @@ async function createPost(req, res) {
 
 async function updatePost(req, res) {
 	try {
-		const post = await Post.findByIdAndUpdate(
-			req.params.id,
-			req.body,
-			{ new: true }
-		);
+		const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+			new: true,
+		});
 		if (!post) {
 			return res.status(404).json({ message: "Post not found" });
 		}

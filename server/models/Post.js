@@ -2,32 +2,37 @@ const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 const slugify = require("slugify");
 
-const PostSchema = new mongoose.Schema({
-	title: {
-		type: String,
-		required: true,
+const PostSchema = new mongoose.Schema(
+	{
+		title: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		slug: {
+			type: String,
+			required: true,
+			unique: true,
+		},
+		content: {
+			type: String,
+			required: true,
+		},
+		author: {
+			type: mongoose.ObjectId,
+			ref: "User",
+			required: true,
+		},
+		// createdAt: { type: Date, default: Date.now },
+		// updatedAt: { type: Date, default: Date.now },
+		tags: {
+			type: [String],
+			required: false,
+		},
+		comments: [{ type: mongoose.ObjectId, ref: "Comment" }],
 	},
-	slug: {
-		type: String,
-		required: true,
-		unique: true,
-	},
-	content: {
-		type: String,
-		required: true,
-	},
-	author: {
-		type: mongoose.ObjectId,
-		ref: "User",
-	},
-	createdAt: { type: Date, default: Date.now },
-	updatedAt: { type: Date, default: Date.now },
-	tags: {
-		type: [String],
-		required: false,
-	},
-	comments: [{ type: mongoose.ObjectId, ref: "Comment" }],
-});
+	{ timestamps: true }
+);
 
 const Post = mongoose.model("Post", PostSchema);
 

@@ -7,7 +7,17 @@ const Index = () => {
 
 	useEffect(() => {
 		const fetchPost = async () => {
-			const { data } = await axios.get("http://localhost:5005/api/posts");
+			const token =
+				"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImxpbmhwbjFAZ21haWwuY29tIiwiaWQiOiI2NDVmYTljODBiZGJkYzAzMjg3ODBjYWEiLCJpYXQiOjE2ODM5OTIzNDUsImV4cCI6MTY4Mzk5NTk0NX0.zlnX2zpHk7dgiVmRkXW4GLIMlbeY0wGztRxKPBtmizM";
+
+			const { data } = await axios.get(
+				"http://localhost:5005/api/posts",
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
 			console.log("data", data);
 			setPosts(data);
 		};
