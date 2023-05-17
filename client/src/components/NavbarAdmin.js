@@ -188,20 +188,18 @@ export default function NavBar() {
 								className="hidden py-2 rounded space-y-2 bg-gray-700"
 							>
 								<li>
-									<a
-										href="#"
-										className="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-300"
-									>
-										All Posts
-									</a>
+									<Link href="/admin/posts">
+										<p className="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-300">
+											All Posts
+										</p>
+									</Link>
 								</li>
 								<li>
-									<a
-										href="#"
-										className="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-300"
-									>
-										Create Post
-									</a>
+									<Link href="/admin/posts/create">
+										<p className="flex items-center w-full p-2 text-gray-400 transition duration-75 rounded-lg pl-11 group hover:bg-gray-300">
+											Create Post
+										</p>
+									</Link>
 								</li>
 							</ul>
 						</li>

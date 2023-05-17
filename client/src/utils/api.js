@@ -13,7 +13,7 @@ async function updateAccessToken() {
 	try {
 		const refreshToken = Cookies.get("refresh_token");
 
-		console.log("refreshToken in updateAccessToken", refreshToken);
+		// console.log("refreshToken in fc updateAccessToken", refreshToken);
 
 		if (!refreshToken) {
 			throw new Error("Refresh token not found.");
@@ -39,12 +39,14 @@ api.interceptors.request.use(
 	async (config) => {
 		let accessToken = Cookies.get("access_token");
 
-		console.warn({ accessToken });
+		console.log("accessToken request ==> ", accessToken);
 
 		// access_token expired, get new token
 		if (!accessToken) {
-			accessToken = updateAccessToken();
+			accessToken = await updateAccessToken();
 		}
+
+		console.log("accessToken new ==> ", accessToken);
 
 		config.headers.authorization = `Bearer ${accessToken}`;
 

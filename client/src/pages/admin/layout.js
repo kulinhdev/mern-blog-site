@@ -1,11 +1,10 @@
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import NavBar from "@/components/NavbarAdmin";
+import Link from "next/link";
 
 const AdminLayout = ({ children }) => {
-	const [isOpen, setIsOpen] = useState(false);
 	const [admin, setAdmin] = useState(null);
 	const router = useRouter();
 

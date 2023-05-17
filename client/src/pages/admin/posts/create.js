@@ -1,9 +1,10 @@
 import api from "@/utils/api";
-import { useState } from "react";
+import Swal from "sweetalert2";
+import { useState, useRef } from "react";
 import AdminLayout from "../layout";
 import { WithContext as ReactTags } from "react-tag-input";
-// import { CKEditor } from "@ckeditor/ckeditor5-react";
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const suggestions = [
 	{ id: "mango", text: "mango" },
@@ -20,6 +21,8 @@ const delimiters = [KeyCodes.comma, KeyCodes.enter];
 function CreatePostPage() {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
+	const [selectedImage, setSelectedImage] = useState(null);
+	const fileInputRef = useRef(null);
 	const [tags, setTags] = useState([
 		{ id: "Thailand", text: "Thailand" },
 		{ id: "India", text: "India" },
@@ -49,25 +52,71 @@ function CreatePostPage() {
 		console.log("The tag at index " + index + " was clicked");
 	};
 
+	const handleImageChange = (event) => {
+		const file = event.target.files[0];
+		if (file) {
+			setSelectedImage(URL.createObjectURL(file));
+		} else {
+			setSelectedImage(null);
+		}
+	};
+
+	const handleUnselectImage = () => {
+		setSelectedImage(null);
+	};
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const adminLogin = localStorage.getItem("admin");
-		const authorId = JSON.parse(adminLogin)._id;
+		const authorId = JSON.parse(adminLogin).id;
+		const imageFile = event.target.image.files[0];
+
+		console.log("imageFile", imageFile);
 
 		try {
-			const bodyRequest = {
-				title,
-				content,
-				tags: tags.map((tag) => tag.text),
-				author: authorId,
-			};
-			const res = await api.post("/api/admin/posts", bodyRequest);
-			console.log("==>", bodyRequest, res);
+			const formData = new FormData();
+			formData.append("title", title);
+			formData.append("content", content);
+			formData.append(
+				"tags",
+				tags.map((tag) => tag.text)
+			);
+			formData.append("author", authorId);
+			formData.append("image", imageFile);
 
-			// setTitle("");
-			// setContent("");
+			const res = await api.post("/api/admin/posts", formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+
+			console.log("Create post ==>", formData, res);
+
+			// Display success message
+			Swal.fire({
+				position: "top-end",
+				icon: "success",
+				title: res.data.message ?? "Create Successful!",
+				showConfirmButton: false,
+				timer: 1500,
+			});
+
+			// Reset input
+			setTitle("");
+			setContent("");
+			setSelectedImage(null);
+			if (fileInputRef.current) {
+				fileInputRef.current.value = null;
+			}
 		} catch (error) {
-			console.error(error);
+			console.error("Create error ==> ", error);
+			Swal.fire({
+				icon: "error",
+				title: "Create new post failed!",
+				text: "Error occurs ..!",
+				confirmButtonColor: "#3085d6",
+				confirmButtonText: "OK",
+			});
 		}
 	};
 
@@ -95,22 +144,59 @@ function CreatePostPage() {
 					</div>
 					<div className="mb-4">
 						<label
+							htmlFor="image"
+							className="block text-gray-700 font-bold mb-2"
+						>
+							Image
+						</label>
+						<div class="grid grid-cols-2 gap-2 content-center">
+							<div class="my-2 self-center">
+								<input
+									type="file"
+									name="image"
+									id="image"
+									accept="image/*"
+									onChange={handleImageChange}
+									ref={fileInputRef}
+									className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+								/>
+							</div>
+							{selectedImage && (
+								<div className="flex items-center mb-2 ml-6">
+									<img
+										src={selectedImage}
+										alt="Selected"
+										className="w-32 h-32 object-cover border border-solid border-2 border-sky-500 rounded-md mr-2"
+									/>
+									<button
+										type="button"
+										className="text-red-500 font-medium"
+										onClick={handleUnselectImage}
+									>
+										Remove
+									</button>
+								</div>
+							)}
+						</div>
+					</div>
+					<div className="mb-4">
+						<label
 							htmlFor="content"
 							className="block text-gray-700 font-bold mb-2"
 						>
 							Content
 						</label>
-						<textarea
+						{/* <textarea
 							name="content"
 							id="content"
 							value={content}
 							onChange={(event) => setContent(event.target.value)}
 							required
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-						/>
-						{/* <CKEditor
+						/> */}
+						<CKEditor
 							editor={ClassicEditor}
-							data="<p>Hello from CKEditor 5!</p>"
+							data={content}
 							onReady={(editor) => {
 								// You can store the "editor" and use when it is needed.
 								console.log("Editor is ready to use!", editor);
@@ -118,6 +204,7 @@ function CreatePostPage() {
 							onChange={(event, editor) => {
 								const data = editor.getData();
 								console.log({ event, editor, data });
+								setContent(data);
 							}}
 							onBlur={(event, editor) => {
 								console.log("Blur.", editor);
@@ -125,7 +212,7 @@ function CreatePostPage() {
 							onFocus={(event, editor) => {
 								console.log("Focus.", editor);
 							}}
-						/> */}
+						/>
 					</div>
 					<div className="mb-4">
 						<label

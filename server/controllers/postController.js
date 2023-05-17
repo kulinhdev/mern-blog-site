@@ -18,7 +18,17 @@ async function getAllPosts(req, res) {
 			.skip(skip)
 			.limit(limit);
 
-		res.status(200).json({ count, posts });
+		// Map the posts and add the image URLs
+		const postsWithImages = posts.map((post) => ({
+			_id: post._id,
+			title: post.title,
+			content: post.content,
+			slug: post.slug,
+			tags: post.tags,
+			imageUrl: `${req.protocol}://${req.get("host")}/${post.image}`,
+		}));
+
+		res.status(200).json({ count, posts: postsWithImages });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
@@ -51,7 +61,7 @@ async function generateSlug(post) {
 		let newSlug = slug;
 		while (foundPost) {
 			newSlug = `${slug}-${count}`;
-			foundPost = await Post.findOne({ newSlug }).exec();
+			foundPost = await Post.findOne({ slug: newSlug }).exec();
 			count++;
 		}
 		post.slug = newSlug;
@@ -59,8 +69,18 @@ async function generateSlug(post) {
 }
 
 async function createPost(req, res) {
+	const { title, content, author } = req.body;
+	const imagePath = req.file ? req.file.path : null;
+
+	console.log("imagePath", imagePath);
+
 	try {
-		const post = new Post(req.body);
+		const post = new Post({
+			title,
+			content,
+			author,
+			image: imagePath,
+		});
 		await generateSlug(post); // Generate a unique slug before saving
 		const savedPost = await post.save();
 		res.json({ post: savedPost, message: "Create new post successfully!" });

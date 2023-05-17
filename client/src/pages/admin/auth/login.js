@@ -1,3 +1,4 @@
+import api from "../../../utils/api";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
@@ -6,7 +7,6 @@ import {
 	setAccessTokenAdmin,
 	setRefreshTokenAdmin,
 } from "../../../utils/common";
-import api from "../../../utils/api";
 
 function LoginPage() {
 	const [email, setEmail] = useState("");

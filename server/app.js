@@ -1,9 +1,10 @@
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
+const configs = require("./config/keys");
 const postRoutes = require("./routes/postRoutes");
 const authRoutes = require("./routes/authRoutes");
 const connectToDatabase = require("./db/connect");
-const configs = require("./config/keys");
 const verifyToken = require("./middleware/auth");
 
 const app = express();
@@ -15,6 +16,12 @@ connectToDatabase();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from the "public" folder
+app.use(
+	"/public/uploads",
+	express.static(path.join(__dirname, "public/uploads"))
+);
 
 // Define routes
 app.use("/api/admin/posts", verifyToken, postRoutes);

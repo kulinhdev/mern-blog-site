@@ -11,7 +11,7 @@ const verifyToken = (req, res, next) => {
 	// Bearer <access_token>
 	const token = requestToken.split(" ")[1];
 
-	console.log("Middleware receive token ==> ", typeof token);
+	// console.log("Middleware receive token ==> ", typeof token);
 
 	if (!token) {
 		return res
