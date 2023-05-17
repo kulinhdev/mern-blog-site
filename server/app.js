@@ -17,7 +17,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Define routes
-app.use("/api/posts", verifyToken, postRoutes);
+app.use("/api/admin/posts", verifyToken, postRoutes);
+app.use("/api/posts", postRoutes);
 app.use("/api/auth", authRoutes);
 
 // The API endpoint

@@ -1,6 +1,8 @@
+/**
+ * @type {import('@types/tailwindcss/tailwind-config').TailwindConfig}
+ */
 module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-}
+	content: ["./pages/**/*.{ts,tsx}", "./public/**/*.html"],
+	plugins: [],
+	theme: {},
+};

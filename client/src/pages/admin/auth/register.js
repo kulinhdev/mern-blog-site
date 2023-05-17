@@ -22,14 +22,14 @@ function RegisterPage() {
 
 	const handleRegister = async (formData) => {
 		const res = await api.post("/api/auth/register", formData);
-		const responseStatus = res.response.status;
-		const responseMessage = res.response.data.message;
+		console.log(res);
+		const responseStatus = res.status;
 
 		if (responseStatus == 201) {
-			const { access_token, refresh_token } = response.data;
+			const { access_token, refresh_token } = res.data;
 
 			// Save tokens to cookies
-			setTokensAdmin(access_token, refresh_token);
+			// setTokensAdmin(access_token, refresh_token);
 
 			// Display success message
 			Swal.fire({
@@ -41,13 +41,17 @@ function RegisterPage() {
 			});
 			router.push("/admin/auth/login");
 		} else {
+			// Get error message
+			const responseMessage =
+				res.response?.data.message ?? "Error occurs!";
+			setError(responseMessage);
 			// Display success message
 			Swal.fire({
-				position: "top-end",
 				icon: "error",
-				title: responseMessage,
-				showConfirmButton: false,
-				timer: 1500,
+				title: "Registration failed!",
+				text: error,
+				confirmButtonColor: "#3085d6",
+				confirmButtonText: "OK",
 			});
 		}
 	};
@@ -58,13 +62,15 @@ function RegisterPage() {
 		try {
 			await handleRegister(formData);
 		} catch (error) {
-			console.log(error);
-			setError(error.response.data.message);
+			// Get error message
+			const responseMessage =
+				res.response?.data.message ?? "Error occurs!";
+			setError(responseMessage);
 			// Display success message
 			Swal.fire({
 				icon: "error",
 				title: "Registration failed!",
-				text: error.response.data.message,
+				text: error,
 				confirmButtonColor: "#3085d6",
 				confirmButtonText: "OK",
 			});
@@ -75,7 +81,7 @@ function RegisterPage() {
 		<div className="min-h-screen bg-gray-100 flex flex-col justify-center py-6 sm:px-6 lg:px-8">
 			<div className="sm:mx-auto sm:w-full sm:max-w-md">
 				<h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900">
-					Register your account
+					Admin - Register
 				</h2>
 			</div>
 			<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

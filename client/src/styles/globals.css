@@ -2,21 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-	--foreground-rgb: 0, 0, 0;
-	--background-start-rgb: 214, 219, 220;
-	--background-end-rgb: 255, 255, 255;
+.app {
+	padding: 40px;
+	text-align: center;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--foreground-rgb: 255, 255, 255;
-		--background-start-rgb: 0, 0, 0;
-		--background-end-rgb: 0, 0, 0;
-	}
+.container {
+	@apply mx-auto w-1/2;
 }
 
-body {
-	color: rgb(var(--foreground-rgb));
-	background: #8db0c5;
+.ReactTags__tags {
+	position: relative;
+}
+
+/* Styles for the input */
+.ReactTags__tagInput {
+	@apply w-56 rounded-md inline-block;
+}
+
+.ReactTags__tagInput input.ReactTags__tagInputField,
+.ReactTags__tagInput input.ReactTags__tagInputField:focus {
+	@apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
+}
+
+/* Styles for selected tags */
+.ReactTags__selected span.ReactTags__tag {
+	@apply inline-block px-3 py-1 mr-2 my-2 text-white bg-blue-500 border border-gray-400 rounded-md text-sm;
+}
+
+.ReactTags__selected button.ReactTags__remove {
+	@apply text-gray-600 ml-3 cursor-pointer;
+}
+
+/* Styles for suggestions */
+.ReactTags__suggestions {
+	@apply absolute;
+}
+
+.ReactTags__suggestions ul {
+	@apply shadow-sm bg-white w-56 list-none;
+}
+
+.ReactTags__suggestions li {
+	@apply border-b border-gray-300 py-1 px-2 m-0 text-sm;
+}
+
+.ReactTags__suggestions li mark {
+	@apply font-semibold underline;
+}
+
+.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
+	@apply bg-blue-200 cursor-pointer;
+}
+
+.ReactTags__remove {
+	@apply border-none cursor-pointer bg-transparent text-white;
 }

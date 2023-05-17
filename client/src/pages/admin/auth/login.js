@@ -12,28 +12,36 @@ function LoginPage() {
 	const router = useRouter();
 
 	useEffect(() => {
-		const token = Cookies.get("refresh_token");
+		const refreshToken = Cookies.get("refresh_token");
+		const accessToken = Cookies.get("access_token");
+		const admin = localStorage.getItem("admin");
 
-		console.log("login check token ==> ", token, Cookies.get());
+		console.log("login check ==> ", refreshToken, accessToken, admin);
 
-		// Check token exists
-		if (router.pathname.startsWith("/admin") && token !== undefined) {
+		if (refreshToken && accessToken && admin) {
+			console.log("admin", JSON.parse(admin));
 			router.push("/admin");
 		}
 	}, [router]);
 
 	const handleLogin = async (email, password) => {
-		const response = await api.post("/api/auth/login", {
+		const res = await api.post("/api/auth/login", {
 			email,
 			password,
 		});
-		console.log("response ==> ", response);
 
-		if (response.status == 200) {
-			const { access_token, refresh_token } = response.data;
+		console.log("response ==> ", res);
+
+		if (res.status == 200) {
+			const { user, access_token, refresh_token } = res.data;
+
+			console.log("res.data", res.data);
 
 			// Save tokens to cookies
 			setTokensAdmin(access_token, refresh_token);
+
+			// Save user data to localStorage
+			localStorage.setItem("admin", JSON.stringify(user));
 
 			// Display success message
 			Swal.fire({
@@ -47,7 +55,10 @@ function LoginPage() {
 			// Redirect to admin page
 			router.push("/admin");
 		} else {
-			setError(response.response.data.message);
+			// Get error message
+			const responseMessage =
+				res.response?.data.message ?? "Error occurs!";
+			setError(responseMessage);
 			// Display success message
 			Swal.fire({
 				icon: "error",
@@ -65,13 +76,15 @@ function LoginPage() {
 		try {
 			handleLogin(email, password);
 		} catch (error) {
-			setError(error.response.data.message);
-			console.log(error);
+			// Get error message
+			const responseMessage =
+				res.response?.data.message ?? "Error occurs!";
+			setError(responseMessage);
 			// Display success message
 			Swal.fire({
 				icon: "error",
 				title: "Login failed!",
-				text: error.response.data.message,
+				text: error,
 				confirmButtonColor: "#3085d6",
 				confirmButtonText: "OK",
 			});
@@ -82,7 +95,7 @@ function LoginPage() {
 		<div className="min-h-screen bg-gray-100 flex flex-col justify-center py-6 sm:px-6 lg:px-8">
 			<div className="sm:mx-auto sm:w-full sm:max-w-md">
 				<h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900">
-					Log in to your account
+					Admin - Log in
 				</h2>
 			</div>
 			<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

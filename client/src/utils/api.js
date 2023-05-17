@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import axios from "axios";
-import { setCookieTokens } from "../utils/common";
+import { setTokensAdmin } from "../utils/common";
 import { useRouter } from "next/router";
 
 const baseURL = "http://localhost:5005";
@@ -10,13 +10,10 @@ const api = axios.create({
 });
 
 async function updateAccessToken() {
-	// const router = useRouter();
-
 	try {
 		const refreshToken = Cookies.get("refresh_token");
 
 		if (!refreshToken) {
-			// router.push("/admin/auth.login");
 			throw new Error("Refresh token not found.");
 		}
 
@@ -25,10 +22,7 @@ async function updateAccessToken() {
 		});
 
 		// Save new tokens to cookies
-		setCookieTokens(
-			response.data.access_token,
-			response.data.refresh_token
-		);
+		setTokensAdmin(response.data.access_token, response.data.refresh_token);
 
 		return response.data.access_token;
 	} catch (error) {
@@ -39,11 +33,16 @@ async function updateAccessToken() {
 
 api.interceptors.request.use(
 	async (config) => {
-		const assetToken = Cookies.get("asset_token");
+		let accessToken = Cookies.get("access_token");
 
-		if (assetToken) {
-			config.headers.Authorization = `Bearer ${assetToken}`;
+		console.warn({ accessToken });
+
+		// access_token expired, get new token
+		if (!accessToken) {
+			accessToken = updateAccessToken();
 		}
+
+		config.headers.authorization = `Bearer ${accessToken}`;
 
 		return config;
 	},
@@ -69,7 +68,7 @@ api.interceptors.response.use(
 			if (newAccessToken) {
 				// Resend original request with new access token
 				const newConfig = { ...originalRequest };
-				newConfig.headers.Authorization = `Bearer ${newAccessToken}`;
+				newConfig.headers.authorization = `Bearer ${newAccessToken}`;
 				return axios(newConfig);
 			}
 		}

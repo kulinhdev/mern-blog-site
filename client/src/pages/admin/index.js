@@ -1,25 +1,45 @@
-import Cookies from "js-cookie";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import AdminLayout from "./layout";
 
 function AdminPage() {
-	const router = useRouter();
-
-	useEffect(() => {
-		const token = Cookies.get("refresh_token");
-
-		console.log("admin check token ==> ", token);
-
-		// Check token doesn't exist
-		if (router.pathname.startsWith("/admin") && token === undefined) {
-			router.push("/admin/auth/login");
-		}
-	}, [router]);
-
 	return (
-		<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-			<h1 className="text-3xl font-bold mb-6">Admin Panel</h1>
-		</div>
+		<AdminLayout>
+			<div className="dashboard">
+				<div className="grid grid-cols-3 gap-4 mb-4">
+					<div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+						<p className="text-2xl text-gray-400 dark:text-gray-500">
+							+
+						</p>
+					</div>
+					<div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+						<p className="text-2xl text-gray-400 dark:text-gray-500">
+							+
+						</p>
+					</div>
+					<div className="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
+						<p className="text-2xl text-gray-400 dark:text-gray-500">
+							+
+						</p>
+					</div>
+				</div>
+				<div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+					<p className="text-2xl text-gray-400 dark:text-gray-500">
+						+
+					</p>
+				</div>
+				<div className="grid grid-cols-2 gap-4 mb-4">
+					<div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+						<p className="text-2xl text-gray-400 dark:text-gray-500">
+							+
+						</p>
+					</div>
+					<div className="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+						<p className="text-2xl text-gray-400 dark:text-gray-500">
+							+
+						</p>
+					</div>
+				</div>
+			</div>
+		</AdminLayout>
 	);
 }
 

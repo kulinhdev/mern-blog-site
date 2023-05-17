@@ -14,7 +14,7 @@ configs.JWTSecret =
 
 function generateAccessToken(user) {
 	const accessToken = jwt.sign(
-		{ email: user.email, userId: user._id },
+		{ email: user.email, userId: user._id, role: user.role },
 		configs.JWTSecret,
 		{
 			expiresIn: configs.JWTAccessTokenExpiresIn,
@@ -25,7 +25,7 @@ function generateAccessToken(user) {
 
 function generateRefreshToken(user) {
 	const refreshToken = jwt.sign(
-		{ email: user.email, userId: user._id },
+		{ email: user.email, userId: user._id, role: user.role },
 		configs.JWTSecret,
 		{
 			expiresIn: configs.JWTRefreshTokenExpiresIn,
@@ -60,6 +60,8 @@ router.post("/register", async (req, res) => {
 			password: hashedPassword,
 		});
 
+		console.log("newUser", newUser);
+
 		// Generate access token and refresh token
 		const accessToken = generateAccessToken(newUser);
 		const refreshToken = generateRefreshToken(newUser);
@@ -68,7 +70,7 @@ router.post("/register", async (req, res) => {
 		newUser.token = refreshToken;
 		await newUser.save();
 
-		console.log({ user: newUser, access_token: accessToken });
+		console.log({ newUser, accessToken, refreshToken });
 
 		res.status(201).json({
 			access_token: accessToken,
@@ -89,7 +91,16 @@ router.post("/login", async (req, res) => {
 	}
 
 	try {
-		const existingUser = await User.findOne({ email });
+		const existingUser = await User.findOne(
+			{ email },
+			{
+				role: 0,
+				isVerified: 0,
+				createdAt: 0,
+				updatedAt: 0,
+				__v: 0,
+			}
+		);
 
 		if (!existingUser) {
 			return res
@@ -110,9 +121,18 @@ router.post("/login", async (req, res) => {
 		const accessToken = generateAccessToken(existingUser);
 		const refreshToken = existingUser.token;
 
-		console.log({ user: existingUser, access_token: accessToken });
+		// Remove the password and token field from the existingUser object
+		existingUser.password = undefined;
+		existingUser.token = undefined;
+
+		console.log({
+			user: existingUser,
+			access_token: accessToken,
+			refresh_token: refreshToken,
+		});
 
 		res.status(200).json({
+			user: existingUser,
 			access_token: accessToken,
 			refresh_token: refreshToken,
 		});
