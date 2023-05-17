@@ -17,12 +17,22 @@
 
 /* Styles for the input */
 .ReactTags__tagInput {
-	@apply w-56 rounded-md inline-block;
+	@apply w-72 rounded-md inline-block;
 }
 
 .ReactTags__tagInput input.ReactTags__tagInputField,
 .ReactTags__tagInput input.ReactTags__tagInputField:focus {
 	@apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
+}
+
+/* Styles for the input */
+/* .ReactTags__editTagInput {
+	@apply w-72 rounded-md inline-block;
+} */
+
+.ReactTags__editTagInput input.ReactTags__editTagInputField,
+.ReactTags__editTagInput input.ReactTags__editTagInputField:focus {
+	@apply shadow appearance-none border rounded py-1 px-2 text-gray-700 leading-tight;
 }
 
 /* Styles for selected tags */

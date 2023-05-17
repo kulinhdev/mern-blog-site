@@ -9,7 +9,9 @@ const verifyToken = (req, res, next) => {
 		req.headers["x-access-token"] || req.headers.authorization;
 
 	// Bearer <access_token>
-	const token = requestToken && requestToken.split(" ")[1];
+	const token = requestToken.split(" ")[1];
+
+	console.log("Middleware receive token ==> ", typeof token);
 
 	if (!token) {
 		return res
@@ -19,9 +21,12 @@ const verifyToken = (req, res, next) => {
 	try {
 		const decoded = jwt.verify(token, configs.JWTSecret);
 		req.user = decoded;
-		console.log("decoded", decoded);
+		console.log("Middleware decoded ==> ", decoded);
 	} catch (err) {
-		return res.status(401).send("Unauthorized - Invalid Token ...!");
+		console.log("Middleware error ==> " + err.message);
+		return res
+			.status(401)
+			.send("Unauthorized - Invalid Token: " + err.message);
 	}
 	return next();
 };

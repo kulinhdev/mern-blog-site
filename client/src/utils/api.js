@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import axios from "axios";
-import { setTokensAdmin } from "../utils/common";
+import { setAccessTokenAdmin, setRefreshTokenAdmin } from "../utils/common";
 import { useRouter } from "next/router";
 
 const baseURL = "http://localhost:5005";
@@ -13,6 +13,8 @@ async function updateAccessToken() {
 	try {
 		const refreshToken = Cookies.get("refresh_token");
 
+		console.log("refreshToken in updateAccessToken", refreshToken);
+
 		if (!refreshToken) {
 			throw new Error("Refresh token not found.");
 		}
@@ -21,8 +23,10 @@ async function updateAccessToken() {
 			refresh_token: refreshToken,
 		});
 
+		console.log("response get /refresh-token ==> ", response);
+
 		// Save new tokens to cookies
-		setTokensAdmin(response.data.access_token, response.data.refresh_token);
+		setAccessTokenAdmin(response.data.access_token);
 
 		return response.data.access_token;
 	} catch (error) {

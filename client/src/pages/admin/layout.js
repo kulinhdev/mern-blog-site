@@ -15,9 +15,13 @@ const AdminLayout = ({ children }) => {
 		const adminLogin = localStorage.getItem("admin");
 		setAdmin(JSON.parse(adminLogin));
 
-		console.log("admin check ==> ", refreshToken, accessToken, adminLogin);
+		console.log("adminCheck ==> ", {
+			refreshToken,
+			accessToken,
+			adminLogin,
+		});
 
-		if (!refreshToken || !accessToken || !adminLogin) {
+		if (!refreshToken || !adminLogin) {
 			router.push("/admin/auth/login");
 		}
 	}, []);

@@ -1,3 +1,4 @@
+const slugify = require("slugify");
 const Post = require("../models/Post");
 
 async function getAllPosts(req, res) {
@@ -35,25 +36,78 @@ async function getPostById(req, res) {
 	}
 }
 
+async function generateSlug(post) {
+	let slug = slugify(post.title, {
+		replacement: "-",
+		trim: true,
+		lower: true,
+		strict: true,
+	});
+	post.slug = slug;
+	let foundPost = await Post.findOne({ slug }).exec();
+	if (foundPost) {
+		// There is already a post with this slug, so we need to generate a new one
+		let count = 1;
+		let newSlug = slug;
+		while (foundPost) {
+			newSlug = `${slug}-${count}`;
+			foundPost = await Post.findOne({ newSlug }).exec();
+			count++;
+		}
+		post.slug = newSlug;
+	}
+}
+
 async function createPost(req, res) {
 	try {
 		const post = new Post(req.body);
+		await generateSlug(post); // Generate a unique slug before saving
 		const savedPost = await post.save();
-		res.json(savedPost);
+		res.json({ post: savedPost, message: "Create new post successfully!" });
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
 }
 
 async function updatePost(req, res) {
+	// try {
+	// 	const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+	// 		new: true,
+	// 	});
+	// 	if (!post) {
+	// 		return res.status(404).json({ message: "Post not found" });
+	// 	}
+	// 	res.json(post);
+	// } catch (error) {
+	// 	res.status(500).json({ error: error.message });
+	// }
+
 	try {
-		const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
-			new: true,
-		});
+		const post = await Post.findById(req.params.id);
 		if (!post) {
-			return res.status(404).json({ message: "Post not found" });
+			return res
+				.status(404)
+				.json({ message: "Post not found with id: " + req.params.id });
 		}
-		res.json(post);
+
+		const { title, content, tags } = req.body;
+
+		// Check if the title change generate new slug
+		if (title && title !== post.title) {
+			post.title = title;
+			await generateSlug(post); // Generate a unique slug before saving
+		}
+
+		// Update the post with the new data
+		post.content = content || post.content;
+		post.tags = tags;
+
+		await post.save();
+
+		res.json({
+			post,
+			message: `Update post ${req.params.id} successfully!`,
+		});
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}

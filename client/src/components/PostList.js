@@ -16,10 +16,15 @@ function PostList({ posts }) {
 					<h2 className="text-xl font-bold mb-2">{post.title}</h2>
 					<p className="text-gray-500 mb-4">{post.createdAt}</p>
 					<p className="mb-4">{post.content.substring(0, 100)}...</p>
-					<Link href={`/posts/${post._id}`}>
-						<a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+					<Link href={`/admin/posts/${post._id}`}>
+						<p className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
 							Read More
-						</a>
+						</p>
+					</Link>
+					<Link href={`/admin/posts/${post._id}/edit`}>
+						<p className="inline-block ml-3 bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+							Edit
+						</p>
 					</Link>
 				</div>
 			))}

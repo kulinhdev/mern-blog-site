@@ -1,7 +1,9 @@
+import api from "@/utils/api";
 import { useState } from "react";
 import AdminLayout from "../layout";
 import { WithContext as ReactTags } from "react-tag-input";
-import api from "@/utils/api";
+// import { CKEditor } from "@ckeditor/ckeditor5-react";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const suggestions = [
 	{ id: "mango", text: "mango" },
@@ -59,11 +61,11 @@ function CreatePostPage() {
 				tags: tags.map((tag) => tag.text),
 				author: authorId,
 			};
-			console.log("bodyRequest", bodyRequest);
-			await api.post("/api/admin/posts", bodyRequest);
+			const res = await api.post("/api/admin/posts", bodyRequest);
+			console.log("==>", bodyRequest, res);
 
-			setTitle("");
-			setContent("");
+			// setTitle("");
+			// setContent("");
 		} catch (error) {
 			console.error(error);
 		}
@@ -106,6 +108,24 @@ function CreatePostPage() {
 							required
 							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 						/>
+						{/* <CKEditor
+							editor={ClassicEditor}
+							data="<p>Hello from CKEditor 5!</p>"
+							onReady={(editor) => {
+								// You can store the "editor" and use when it is needed.
+								console.log("Editor is ready to use!", editor);
+							}}
+							onChange={(event, editor) => {
+								const data = editor.getData();
+								console.log({ event, editor, data });
+							}}
+							onBlur={(event, editor) => {
+								console.log("Blur.", editor);
+							}}
+							onFocus={(event, editor) => {
+								console.log("Focus.", editor);
+							}}
+						/> */}
 					</div>
 					<div className="mb-4">
 						<label

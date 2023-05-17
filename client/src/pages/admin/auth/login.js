@@ -2,7 +2,10 @@ import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { setTokensAdmin } from "../../../utils/common";
+import {
+	setAccessTokenAdmin,
+	setRefreshTokenAdmin,
+} from "../../../utils/common";
 import api from "../../../utils/api";
 
 function LoginPage() {
@@ -16,10 +19,9 @@ function LoginPage() {
 		const accessToken = Cookies.get("access_token");
 		const admin = localStorage.getItem("admin");
 
-		console.log("login check ==> ", refreshToken, accessToken, admin);
+		console.log("loginCheck ==> ", { refreshToken, accessToken, admin });
 
-		if (refreshToken && accessToken && admin) {
-			console.log("admin", JSON.parse(admin));
+		if (refreshToken && admin) {
 			router.push("/admin");
 		}
 	}, [router]);
@@ -38,7 +40,8 @@ function LoginPage() {
 			console.log("res.data", res.data);
 
 			// Save tokens to cookies
-			setTokensAdmin(access_token, refresh_token);
+			setAccessTokenAdmin(access_token);
+			setRefreshTokenAdmin(refresh_token);
 
 			// Save user data to localStorage
 			localStorage.setItem("admin", JSON.stringify(user));

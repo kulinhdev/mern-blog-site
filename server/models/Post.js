@@ -11,7 +11,6 @@ const PostSchema = new mongoose.Schema(
 		},
 		slug: {
 			type: String,
-			required: true,
 			unique: true,
 		},
 		content: {
@@ -32,21 +31,21 @@ const PostSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-const Post = mongoose.model("Post", PostSchema);
+// Generate slug before save
+// PostSchema.pre("save", function (next) {
+// 	this.slug = slugify(this.title, {
+// 		replacement: "-",
+// 		trim: true,
+// 		locale: "vi",
+// 		lower: true,
+// 		strict: true,
+// 	});
+// 	next();
+// });
 
 // Add the 'id' field as a Number type with auto-incrementing
-PostSchema.plugin(AutoIncrement, { inc_field: "id" });
+// PostSchema.plugin(AutoIncrement, { inc_field: "id" });
 
-// Generate slug before save
-PostSchema.pre("save", function (next) {
-	this.slug = slugify(this.title, {
-		replacement: "-",
-		trim: true,
-		locale: "vi",
-		lower: true,
-		strict: true,
-	});
-	next();
-});
+const Post = mongoose.model("Post", PostSchema);
 
 module.exports = Post;

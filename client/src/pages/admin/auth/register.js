@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import api from "../../../utils/api";
-import { setTokensAdmin } from "../../../utils/common";
+import {
+	setAccessTokenAdmin,
+	setRefreshTokenAdmin,
+} from "../../../utils/common";
 
 function RegisterPage() {
 	const router = useRouter();
@@ -26,16 +29,13 @@ function RegisterPage() {
 		const responseStatus = res.status;
 
 		if (responseStatus == 201) {
-			const { access_token, refresh_token } = res.data;
-
-			// Save tokens to cookies
-			// setTokensAdmin(access_token, refresh_token);
+			const { message } = res.data;
 
 			// Display success message
 			Swal.fire({
 				position: "top-end",
 				icon: "success",
-				title: "Registration Successful!",
+				title: message ?? "Registration Successful!",
 				showConfirmButton: false,
 				timer: 1500,
 			});

@@ -25,7 +25,7 @@ function generateAccessToken(user) {
 
 function generateRefreshToken(user) {
 	const refreshToken = jwt.sign(
-		{ email: user.email, userId: user._id, role: user.role },
+		{ email: user.email, _id: user._id, role: user.role },
 		configs.JWTSecret,
 		{
 			expiresIn: configs.JWTRefreshTokenExpiresIn,
@@ -57,6 +57,7 @@ router.post("/register", async (req, res) => {
 			firstName,
 			lastName,
 			email,
+			role: "admin",
 			password: hashedPassword,
 		});
 
@@ -73,8 +74,7 @@ router.post("/register", async (req, res) => {
 		console.log({ newUser, accessToken, refreshToken });
 
 		res.status(201).json({
-			access_token: accessToken,
-			refresh_token: refreshToken,
+			message: `Hi ${newUser.userName}, Your account has been successfully registered!`,
 		});
 	} catch (error) {
 		console.error(error);
@@ -122,17 +122,22 @@ router.post("/login", async (req, res) => {
 		const refreshToken = existingUser.token;
 
 		// Remove the password and token field from the existingUser object
-		existingUser.password = undefined;
-		existingUser.token = undefined;
+		const resUser = {
+			email: existingUser.email,
+			firstName: existingUser.firstName,
+			lastName: existingUser.lastName,
+			userName: existingUser.userName,
+			id: existingUser._id,
+		};
 
-		console.log({
-			user: existingUser,
+		console.log("login admin", {
+			user: resUser,
 			access_token: accessToken,
 			refresh_token: refreshToken,
 		});
 
 		res.status(200).json({
-			user: existingUser,
+			user: resUser,
 			access_token: accessToken,
 			refresh_token: refreshToken,
 		});
@@ -151,6 +156,7 @@ router.post("/refresh-token", (req, res) => {
 			.json({ message: "refresh_token must be fill ...!" });
 
 	jwt.verify(refreshToken, configs.JWTSecret, (error, user) => {
+		console.log("jwt.verify in /refresh-token ==> ", error, user);
 		if (error) return res.status(403).json({ message: error.message });
 		const accessToken = generateAccessToken(user);
 		res.status(200).json({ access_token: accessToken });
