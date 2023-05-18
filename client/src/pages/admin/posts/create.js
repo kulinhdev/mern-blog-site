@@ -1,10 +1,23 @@
 import api from "@/utils/api";
 import Swal from "sweetalert2";
 import { useState, useRef } from "react";
-import AdminLayout from "../layout";
 import { WithContext as ReactTags } from "react-tag-input";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import AdminLayout from "../layout";
+import dynamic from "next/dynamic"; // Import the dynamic function from Next.js
+const DynamicEditor = dynamic(
+	() => import("../../../components/DynamicEditor"),
+	{
+		ssr: false, // Ensure the component is not rendered on the server
+	}
+);
+// import { CKEditor } from "@ckeditor/ckeditor5-react";
+// const DynamicEditor = dynamic(
+// 	() => import("@ckeditor/ckeditor5-react").then((module) => module.CKEditor),
+// 	{
+// 		ssr: false,
+// 	}
+// );
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const suggestions = [
 	{ id: "mango", text: "mango" },
@@ -69,19 +82,20 @@ function CreatePostPage() {
 		event.preventDefault();
 		const adminLogin = localStorage.getItem("admin");
 		const authorId = JSON.parse(adminLogin).id;
+		const tagsString = JSON.stringify(tags);
 		const imageFile = event.target.image.files[0];
 
-		console.log("imageFile", imageFile);
+		console.log("params ==> ", tagsString, imageFile);
 
 		try {
 			const formData = new FormData();
 			formData.append("title", title);
 			formData.append("content", content);
-			formData.append("tags", tags);
+			formData.append("tags", tagsString);
 			formData.append("author", authorId);
 			formData.append("image", imageFile);
 
-			console.log("formData", formData);
+			console.log("formData", Object.fromEntries(formData));
 
 			const res = await api.post("/api/admin/posts", formData, {
 				headers: {
@@ -148,8 +162,8 @@ function CreatePostPage() {
 						>
 							Image
 						</label>
-						<div class="grid grid-cols-2 gap-2 content-center">
-							<div class="my-2 self-center">
+						<div className="grid grid-cols-2 gap-2 content-center">
+							<div className="my-2 self-center">
 								<input
 									type="file"
 									name="image"
@@ -165,7 +179,7 @@ function CreatePostPage() {
 									<img
 										src={selectedImage}
 										alt="Selected"
-										className="w-32 h-32 object-cover border border-solid border-2 border-sky-500 rounded-md mr-2"
+										className="w-32 h-32 object-cover border-solid border-2 border-sky-500 rounded-md mr-2"
 									/>
 									<button
 										type="button"
@@ -185,16 +199,7 @@ function CreatePostPage() {
 						>
 							Content
 						</label>
-						{/* <textarea
-							name="content"
-							id="content"
-							value={content}
-							onChange={(event) => setContent(event.target.value)}
-							required
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-						/> */}
-						<CKEditor
-							editor={ClassicEditor}
+						<DynamicEditor
 							data={content}
 							onReady={(editor) => {
 								// You can store the "editor" and use when it is needed.

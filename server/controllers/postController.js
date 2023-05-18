@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const slugify = require("slugify");
 const Post = require("../models/Post");
 
@@ -25,6 +27,7 @@ async function getAllPosts(req, res) {
 			content: post.content,
 			slug: post.slug,
 			tags: post.tags,
+			createdAt: post.createdAt,
 			imageUrl: `${req.protocol}://${req.get("host")}/${post.image}`,
 		}));
 
@@ -48,6 +51,7 @@ async function getPostById(req, res) {
 			content: post.content,
 			slug: post.slug,
 			tags: post.tags,
+			createdAt: post.createdAt,
 			imageUrl: `${req.protocol}://${req.get("host")}/${post.image}`,
 		};
 
@@ -80,48 +84,43 @@ async function generateSlug(post) {
 }
 
 async function createPost(req, res) {
-	const { title, content, author } = req.body;
+	const { title, content, author, tags } = req.body;
 	const imagePath = req.file ? req.file.path : null;
 
 	console.log("imagePath", imagePath);
+
+	console.log("tags server ==> ", JSON.parse(tags));
 
 	try {
 		const post = new Post({
 			title,
 			content,
 			author,
+			tags: JSON.parse(tags),
 			image: imagePath,
 		});
 		await generateSlug(post); // Generate a unique slug before saving
 		const savedPost = await post.save();
 		res.json({ post: savedPost, message: "Create new post successfully!" });
 	} catch (error) {
+		console.log("createPost error ==> ", createPost);
 		res.status(500).json({ error: error.message });
 	}
 }
 
 async function updatePost(req, res) {
-	// try {
-	// 	const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
-	// 		new: true,
-	// 	});
-	// 	if (!post) {
-	// 		return res.status(404).json({ message: "Post not found" });
-	// 	}
-	// 	res.json(post);
-	// } catch (error) {
-	// 	res.status(500).json({ error: error.message });
-	// }
-
 	try {
 		const post = await Post.findById(req.params.id);
+
 		if (!post) {
 			return res
 				.status(404)
 				.json({ message: "Post not found with id: " + req.params.id });
 		}
 
-		const { title, content, tags } = req.body;
+		const { title, content, author, tags } = req.body;
+
+		const imagePath = req.file ? req.file.path : post.image;
 
 		// Check if the title change generate new slug
 		if (title && title !== post.title) {
@@ -130,8 +129,9 @@ async function updatePost(req, res) {
 		}
 
 		// Update the post with the new data
+		post.image = imagePath;
+		post.tags = JSON.parse(tags);
 		post.content = content || post.content;
-		post.tags = tags;
 
 		await post.save();
 
@@ -140,6 +140,7 @@ async function updatePost(req, res) {
 			message: `Update post ${req.params.id} successfully!`,
 		});
 	} catch (error) {
+		console.log("updatePost error ==> ", createPost);
 		res.status(500).json({ error: error.message });
 	}
 }
@@ -150,6 +151,22 @@ async function deletePost(req, res) {
 		if (!post) {
 			return res.status(404).json({ message: "Post not found" });
 		}
+
+		// Remove the associated image file
+		if (post.image) {
+			const imagePath = path.join(
+				__dirname,
+				"../public/uploads",
+				post.image
+			);
+			console.log("remove imagePath ==> ", imagePath);
+			fs.unlink(imagePath, (error) => {
+				if (error) {
+					console.error("Error deleting image:", error);
+				}
+			});
+		}
+
 		res.json({ message: "Post deleted successfully" });
 	} catch (error) {
 		res.status(500).json({ error: error.message });

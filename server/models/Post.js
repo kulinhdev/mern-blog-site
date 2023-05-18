@@ -29,7 +29,12 @@ const PostSchema = new mongoose.Schema(
 			required: true,
 		},
 		tags: {
-			type: [String],
+			type: [
+				{
+					id: { type: String },
+					text: { type: String },
+				},
+			],
 			required: false,
 		},
 		comments: [{ type: mongoose.ObjectId, ref: "Comment" }],

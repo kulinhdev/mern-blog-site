@@ -35,6 +35,8 @@ function PostPage() {
 
 	const handleSearch = (event) => {
 		event.preventDefault();
+
+		if (!searchTerm) return;
 		fetchData();
 	};
 
@@ -43,9 +45,7 @@ function PostPage() {
 			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 				<h1 className="text-3xl font-bold mb-6">Admin Panel</h1>
 				<form onSubmit={handleSearch} className="mb-8">
-					<label htmlFor="search" className="sr-only">
-						Search
-					</label>
+					<h2 className="text-xl font-semibold mb-2">Search</h2>
 					<input
 						type="text"
 						id="search"

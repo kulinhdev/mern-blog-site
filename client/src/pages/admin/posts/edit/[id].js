@@ -4,9 +4,13 @@ import { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import AdminLayout from "../../layout";
 import { WithContext as ReactTags } from "react-tag-input";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+import dynamic from "next/dynamic"; // Import the dynamic function from Next.js
+const DynamicEditor = dynamic(
+	() => import("../../../../components/DynamicEditor"),
+	{
+		ssr: false, // Ensure the component is not rendered on the server
+	}
+);
 const suggestions = [
 	{ id: "mango", text: "mango" },
 	{ id: "pineapple", text: "pineapple" },
@@ -53,7 +57,7 @@ function EditPostPage() {
 	};
 
 	const handleAddition = (tag) => {
-		setTags([...tags, tag]);
+		setTags([...tags, { id: tag.text, text: tag.text }]);
 	};
 
 	const handleDrag = (tag, currPos, newPos) => {
@@ -72,6 +76,7 @@ function EditPostPage() {
 
 	const handleImageChange = (event) => {
 		const file = event.target.files[0];
+		console.log("file", file);
 		if (file) {
 			setSelectedImage(URL.createObjectURL(file));
 		} else {
@@ -87,20 +92,20 @@ function EditPostPage() {
 		event.preventDefault();
 		const adminLogin = localStorage.getItem("admin");
 		const authorId = JSON.parse(adminLogin).id;
+		const tagsString = JSON.stringify(tags);
 		const imageFile = event.target.image.files[0];
 
-		console.log("imageFile", imageFile);
+		console.log("params ==> ", tagsString, imageFile);
 
 		try {
 			const formData = new FormData();
 			formData.append("title", title);
 			formData.append("content", content);
-			formData.append(
-				"tags",
-				tags.map((tag) => tag.text)
-			);
+			formData.append("tags", tagsString);
 			formData.append("author", authorId);
 			formData.append("image", imageFile);
+
+			console.log("formData", Object.fromEntries(formData));
 
 			const res = await api.put(`/api/admin/posts/${postId}`, formData, {
 				headers: {
@@ -108,7 +113,7 @@ function EditPostPage() {
 				},
 			});
 
-			console.log(`Edit post: ${postId} ==> `, formData, res);
+			console.log(`Edit post: ${postId} ==> `, res);
 
 			// Display success message
 			Swal.fire({
@@ -118,14 +123,6 @@ function EditPostPage() {
 				showConfirmButton: false,
 				timer: 1500,
 			});
-
-			// Reset input
-			setTitle("");
-			setContent("");
-			setSelectedImage(null);
-			if (fileInputRef.current) {
-				fileInputRef.current.value = null;
-			}
 		} catch (error) {
 			console.error("Edit error ==> ", error);
 			Swal.fire({
@@ -165,8 +162,8 @@ function EditPostPage() {
 							htmlFor="image"
 							className="block text-gray-700 font-bold mb-2"
 						></label>
-						<div class="grid grid-cols-2 gap-2 content-center">
-							<div class="my-2 self-center">
+						<div className="grid grid-cols-2 gap-2 content-center">
+							<div className="my-2 self-center">
 								<input
 									type="file"
 									name="image"
@@ -182,7 +179,7 @@ function EditPostPage() {
 									<img
 										src={selectedImage}
 										alt="Selected"
-										className="w-32 h-32 object-cover border border-solid border-2 border-sky-500 rounded-md mr-2"
+										className="w-44 max-h-52 object-cover border-solid border-2 border-sky-500 rounded-md mr-2"
 									/>
 									<button
 										type="button"
@@ -202,8 +199,7 @@ function EditPostPage() {
 						>
 							Content
 						</label>
-						<CKEditor
-							editor={ClassicEditor}
+						<DynamicEditor
 							data={content}
 							onReady={(editor) => {
 								// You can store the "editor" and use when it is needed.
