@@ -1,9 +1,10 @@
 import Link from "next/link";
+import { formatDate } from "../utils/common";
 
 function PostList({ posts }) {
 	return (
 		<div class="relative overflow-x-auto shadow-md sm:rounded-lg my-5">
-			<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+			<table class="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
 				<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
 					<tr>
 						<th scope="col" class="px-6 py-3">
@@ -35,17 +36,23 @@ function PostList({ posts }) {
 							key={post._id}
 							class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
 						>
-							<td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+							<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
 								{post.title}
 							</td>
 							<td class="px-6 py-4">{post.slug}</td>
 							<td class="px-6 py-4">
-								<img class="w-24" src={post.imageUrl}></img>
+								<img class="w-32" src={post.imageUrl}></img>
 							</td>
 							<td class="px-6 py-4">
 								<div
 									dangerouslySetInnerHTML={{
-										__html: post.content,
+										__html:
+											post.content.length > 200
+												? `${post.content.substring(
+														0,
+														50
+												  )}...`
+												: post.content,
 									}}
 								></div>
 							</td>
@@ -62,7 +69,7 @@ function PostList({ posts }) {
 								</div>
 							</td>
 							<td className="px-6 py-4">
-								{new Date(post.createdAt).toLocaleString()}
+								{formatDate(post.createdAt)}
 							</td>
 							<td className="px-6 py-4">
 								<div className=" flex text-right text-sm font-medium">
@@ -78,9 +85,6 @@ function PostList({ posts }) {
 											Edit
 										</p>
 									</Link>
-									<button className="text-red-600 hover:text-red-900  hover:underline">
-										Delete
-									</button>
 								</div>
 							</td>
 						</tr>

@@ -12,3 +12,21 @@ export function setRefreshTokenAdmin(refreshToken) {
 	// Set refresh token in cookie with 30 day expiry
 	Cookies.set("refresh_token", refreshToken, { expires: 30, path: "/admin" });
 }
+
+// Format: Thursday, May 18, 2023
+export function formatDate(dateString) {
+	const date = new Date(dateString);
+
+	const options = {
+		weekday: "long",
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	};
+
+	const formattedDate = date.toLocaleDateString("en-US", options);
+
+	const minutes = 10; // Assuming it's a constant for now
+
+	return `${formattedDate} — ${minutes} min read`;
+};

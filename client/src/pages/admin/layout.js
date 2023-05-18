@@ -25,7 +25,7 @@ const AdminLayout = ({ children }) => {
 	return (
 		<div className="layout">
 			<NavBar />
-			<div className="p-4 sm:ml-64 bg-gray-400">
+			<div className="p-4 sm:ml-64">
 				<div className="p-4 mt-14">{children}</div>
 			</div>
 		</div>

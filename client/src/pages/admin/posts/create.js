@@ -37,10 +37,9 @@ function CreatePostPage() {
 	const [selectedImage, setSelectedImage] = useState(null);
 	const fileInputRef = useRef(null);
 	const [tags, setTags] = useState([
-		{ id: "Thailand", text: "Thailand" },
-		{ id: "India", text: "India" },
-		{ id: "Vietnam", text: "Vietnam" },
-		{ id: "Turkey", text: "Turkey" },
+		{ id: "Technology", text: "Technology" },
+		{ id: "Learning", text: "Learning" },
+		{ id: "Skill", text: "Skill" },
 	]);
 
 	const handleDelete = (i) => {
@@ -115,12 +114,12 @@ function CreatePostPage() {
 			});
 
 			// Reset input
-			// setTitle("");
-			// setContent("");
-			// setSelectedImage(null);
-			// if (fileInputRef.current) {
-			// 	fileInputRef.current.value = null;
-			// }
+			setTitle("");
+			setContent("");
+			setSelectedImage(null);
+			if (fileInputRef.current) {
+				fileInputRef.current.value = null;
+			}
 		} catch (error) {
 			console.error("Create error ==> ", error);
 			Swal.fire({
