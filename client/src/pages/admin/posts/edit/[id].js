@@ -1,7 +1,8 @@
 import api from "@/utils/api";
+import { useRouter } from "next/router";
+import { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
-import { useState, useRef } from "react";
-import AdminLayout from "../layout";
+import AdminLayout from "../../layout";
 import { WithContext as ReactTags } from "react-tag-input";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -18,24 +19,41 @@ const KeyCodes = {
 
 const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
-function CreatePostPage() {
+function EditPostPage() {
+	const router = useRouter();
+	const [postId, setPostId] = useState("");
 	const [title, setTitle] = useState("");
+	const [tags, setTags] = useState([]);
 	const [content, setContent] = useState("");
 	const [selectedImage, setSelectedImage] = useState(null);
 	const fileInputRef = useRef(null);
-	const [tags, setTags] = useState([
-		{ id: "Thailand", text: "Thailand" },
-		{ id: "India", text: "India" },
-		{ id: "Vietnam", text: "Vietnam" },
-		{ id: "Turkey", text: "Turkey" },
-	]);
+
+	useEffect(() => {
+		const { id } = router.query;
+		console.log(router.query);
+		setPostId(id);
+		const fetchData = async () => {
+			const response = await api.get(`/api/admin/posts/${id}`);
+
+			console.log(response.data);
+
+			if (response.status === 200) {
+				setTitle(response.data?.title);
+				setContent(response.data?.content);
+				setSelectedImage(response.data?.imageUrl);
+				setTags(response.data?.tags);
+			}
+		};
+
+		fetchData();
+	}, [router.query]);
 
 	const handleDelete = (i) => {
 		setTags(tags.filter((tag, index) => index !== i));
 	};
 
 	const handleAddition = (tag) => {
-		setTags([...tags, { id: tag.text, text: tag.text }]);
+		setTags([...tags, tag]);
 	};
 
 	const handleDrag = (tag, currPos, newPos) => {
@@ -77,19 +95,20 @@ function CreatePostPage() {
 			const formData = new FormData();
 			formData.append("title", title);
 			formData.append("content", content);
-			formData.append("tags", tags);
+			formData.append(
+				"tags",
+				tags.map((tag) => tag.text)
+			);
 			formData.append("author", authorId);
 			formData.append("image", imageFile);
 
-			console.log("formData", formData);
-
-			const res = await api.post("/api/admin/posts", formData, {
+			const res = await api.put(`/api/admin/posts/${postId}`, formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
 			});
 
-			console.log("Create post ==>", res);
+			console.log(`Edit post: ${postId} ==> `, formData, res);
 
 			// Display success message
 			Swal.fire({
@@ -101,17 +120,17 @@ function CreatePostPage() {
 			});
 
 			// Reset input
-			// setTitle("");
-			// setContent("");
-			// setSelectedImage(null);
-			// if (fileInputRef.current) {
-			// 	fileInputRef.current.value = null;
-			// }
+			setTitle("");
+			setContent("");
+			setSelectedImage(null);
+			if (fileInputRef.current) {
+				fileInputRef.current.value = null;
+			}
 		} catch (error) {
-			console.error("Create error ==> ", error);
+			console.error("Edit error ==> ", error);
 			Swal.fire({
 				icon: "error",
-				title: "Create new post failed!",
+				title: "Edit new post failed!",
 				text: "Error occurs ..!",
 				confirmButtonColor: "#3085d6",
 				confirmButtonText: "OK",
@@ -122,7 +141,7 @@ function CreatePostPage() {
 	return (
 		<AdminLayout>
 			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-				<h1 className="text-3xl font-bold mb-6">Create Post</h1>
+				<h1 className="text-3xl font-bold mb-6">Edit Post</h1>
 				<form onSubmit={handleSubmit}>
 					<div className="mb-4">
 						<label
@@ -145,9 +164,7 @@ function CreatePostPage() {
 						<label
 							htmlFor="image"
 							className="block text-gray-700 font-bold mb-2"
-						>
-							Image
-						</label>
+						></label>
 						<div class="grid grid-cols-2 gap-2 content-center">
 							<div class="my-2 self-center">
 								<input
@@ -185,14 +202,6 @@ function CreatePostPage() {
 						>
 							Content
 						</label>
-						{/* <textarea
-							name="content"
-							id="content"
-							value={content}
-							onChange={(event) => setContent(event.target.value)}
-							required
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-						/> */}
 						<CKEditor
 							editor={ClassicEditor}
 							data={content}
@@ -239,7 +248,7 @@ function CreatePostPage() {
 							type="submit"
 							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 						>
-							Create Post
+							Update Post
 						</button>
 					</div>
 				</form>
@@ -248,4 +257,4 @@ function CreatePostPage() {
 	);
 }
 
-export default CreatePostPage;
+export default EditPostPage;

@@ -21,7 +21,7 @@ function PostList({ posts }) {
 							Read More
 						</p>
 					</Link>
-					<Link href={`/admin/posts/${post._id}/edit`}>
+					<Link href={`/admin/posts/edit/${post._id}`}>
 						<p className="inline-block ml-3 bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
 							Edit
 						</p>

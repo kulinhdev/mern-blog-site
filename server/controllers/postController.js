@@ -40,7 +40,18 @@ async function getPostById(req, res) {
 		if (!post) {
 			return res.status(404).json({ message: "Post not found" });
 		}
-		res.json(post);
+
+		// Map the posts and add the image URLs
+		const postWithImage = {
+			_id: post._id,
+			title: post.title,
+			content: post.content,
+			slug: post.slug,
+			tags: post.tags,
+			imageUrl: `${req.protocol}://${req.get("host")}/${post.image}`,
+		};
+
+		res.json(postWithImage);
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
