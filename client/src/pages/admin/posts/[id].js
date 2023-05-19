@@ -43,7 +43,7 @@ function PostPage() {
 		const confirmDelete = async () => {
 			try {
 				console.log(post._id);
-				const res = await api.delete(`/api/posts/${post._id}`);
+				const res = await api.delete(`/api/admin/posts/${post._id}`);
 
 				// Display success message
 				Swal.fire({

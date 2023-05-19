@@ -2,8 +2,36 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 export default function NavBar() {
+	const router = useRouter();
+
+	const [adminAccount, setAdminAccount] = useState();
+
+	useEffect(() => {
+		const admin = localStorage.getItem("admin");
+
+		if (admin) {
+			setAdminAccount(JSON.parse(admin));
+		}
+	}, []);
+
+	const onLogOutAdmin = () => {
+		localStorage.removeItem("admin");
+
+		// Display success message
+		Swal.fire({
+			position: "top-end",
+			icon: "success",
+			title: "Logout Successful!",
+			showConfirmButton: false,
+			timer: 1500,
+		});
+
+		router.push("/admin/auth/login");
+	};
+
 	return (
 		<div className="navbar">
 			<nav className="fixed top-0 z-50 w-full text-white bg-gray-800">
@@ -52,13 +80,19 @@ export default function NavBar() {
 											className="text-sm text-gray-900 dark:text-white"
 											role="none"
 										>
-											Pham Ngoc Linh
+											Hi,
+											{adminAccount && (
+												<span className="text-sm ml-1 font-medium text-gray-900 truncate">
+													{adminAccount.firstName}{" "}
+													{adminAccount.lastName}
+												</span>
+											)}
 										</p>
 										<p
 											className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
 											role="none"
 										>
-											linhpn@gmail.com
+											{adminAccount && adminAccount.email}
 										</p>
 									</div>
 									<ul className="py-1" role="none">
@@ -84,7 +118,7 @@ export default function NavBar() {
 											<button
 												className="block px-4 py-2 w-full text-sm text-left text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
 												role="menuitem"
-												onClick={() => alert("hello")}
+												onClick={onLogOutAdmin}
 											>
 												Sign out
 											</button>

@@ -11,7 +11,7 @@ const Index = () => {
 
 	const fetchData = async (page = 1) => {
 		const response = await api.get(
-			`/api/admin/posts?page=${page}&title=${searchTerm}`
+			`/api/posts?page=${page}&title=${searchTerm}`
 		);
 		setCurrentPage(page);
 		setPages(Math.ceil(response.data.count / 10));

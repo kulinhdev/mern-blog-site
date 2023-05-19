@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PostList from "../../../components/PostList";
 import api from "../../../utils/api";
 import AdminLayout from "../layout";
+import Link from "next/link";
 
 function PostPage() {
 	const [posts, setPosts] = useState([]);
@@ -44,6 +45,12 @@ function PostPage() {
 		<AdminLayout>
 			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 				<h1 className="text-3xl font-bold mb-6">Admin Panel</h1>
+				<Link
+					href="/admin/posts/create"
+					className="bg-blue-500 hover:bg-blue-700 inline-block my-5 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+				>
+					Create New
+				</Link>
 				<form onSubmit={handleSearch} className="mb-8">
 					<h2 className="text-xl font-semibold mb-2">Search</h2>
 					<input
