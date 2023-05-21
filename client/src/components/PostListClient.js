@@ -7,7 +7,7 @@ function PostList({ posts }) {
 			{posts.map((post) => (
 				<div
 					key={post._id}
-					className="bg-white shadow-md rounded-md my-3 p-4"
+					className="bg-gray-200 shadow-md rounded-md my-3 p-4"
 				>
 					<img
 						src={post.imageUrl}

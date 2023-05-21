@@ -29,7 +29,7 @@ const Post = () => {
 			<NavBar />
 			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 				{post && (
-					<div className="bg-white rounded-lg shadow-lg px-6 py-8">
+					<div className="bg-gray-200 rounded-lg shadow-lg px-6 py-8">
 						<h1 className="text-3xl font-bold mb-6">
 							{post.title}
 						</h1>

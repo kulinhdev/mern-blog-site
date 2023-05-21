@@ -1,8 +1,8 @@
-import api from "@/utils/api";
-import Swal from "sweetalert2";
 import { useState, useRef } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
-import AdminLayout from "../layout";
+import api from "@/utils/api";
+import Swal from "sweetalert2";
+import AdminLayout from "@/components/layouts/AdminLayout";
 import dynamic from "next/dynamic"; // Import the dynamic function from Next.js
 const DynamicEditor = dynamic(
 	() => import("../../../components/DynamicEditor"),
@@ -134,7 +134,7 @@ function CreatePostPage() {
 
 	return (
 		<AdminLayout>
-			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+			<div className="mega-page">
 				<h1 className="text-3xl font-bold mb-6">Create Post</h1>
 				<form onSubmit={handleSubmit}>
 					<div className="mb-4">

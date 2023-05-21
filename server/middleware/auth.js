@@ -9,7 +9,7 @@ const verifyToken = (req, res, next) => {
 		req.headers["x-access-token"] || req.headers.authorization;
 
 	// Bearer <access_token>
-	const token = requestToken.split(" ")[1];
+	const token = requestToken?.split(" ")[1];
 
 	// console.log("Middleware receive token ==> ", typeof token);
 

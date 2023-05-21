@@ -1,17 +1,9 @@
 import "@/styles/globals.css";
 import Script from "next/script";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+config.autoAddCss = false;
 
 export default function App({ Component, pageProps }) {
-	return (
-		<>
-			<Component {...pageProps} />
-			<Script
-				src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"
-				strategy="beforeInteractive"
-				onReady={() => {
-					console.log("Script flowbite has loaded!");
-				}}
-			/>
-		</>
-	);
+	return <Component {...pageProps} />;
 }

@@ -30,7 +30,7 @@ app.use("/api/posts", postClientRoutes);
 app.use("/api/auth", authRoutes);
 
 // The API endpoint
-app.get(["/", "/home"], verifyToken, (req, res) => {
+app.get(["/", "/home"], (req, res) => {
 	res.send({ message: "Hello From Express" });
 });
 
@@ -43,6 +43,6 @@ const listen_port = configs.listenPort || 5000;
 const expose_port = configs.exposePort || 5005;
 
 // Listen port from docker server
-app.listen(listen_port);
+app.listen(expose_port);
 
 console.log(`App is listening on port: http://localhost:${expose_port}`);

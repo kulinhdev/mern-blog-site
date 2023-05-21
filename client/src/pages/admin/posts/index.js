@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import PostList from "../../../components/PostList";
-import api from "../../../utils/api";
-import AdminLayout from "../layout";
+import PostList from "@/components/PostListAdmin";
+import api from "@/utils/api";
+import AdminLayout from "@/components/layouts/AdminLayout";
 import Link from "next/link";
 
 function PostPage() {
@@ -43,46 +43,52 @@ function PostPage() {
 
 	return (
 		<AdminLayout>
-			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-				<h1 className="text-3xl font-bold mb-6">Admin Panel</h1>
+			<div className="mega-page">
+				<h1 className="text-3xl font-bold mb-6">All Posts</h1>
 				<Link
 					href="/admin/posts/create"
-					className="bg-blue-500 hover:bg-blue-700 inline-block my-5 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+					className="bg-blue-500 hover:bg-blue-700 inline-block mt-5 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 				>
 					Create New
 				</Link>
-				<form onSubmit={handleSearch} className="mb-8">
+				<div className="search-box my-7">
 					<h2 className="text-xl font-semibold mb-2">Search</h2>
-					<input
-						type="text"
-						id="search"
-						name="search"
-						value={searchTerm}
-						onChange={(event) => setSearchTerm(event.target.value)}
-						placeholder="Search by title"
-						className="border-gray-400 border-2 py-2 px-4 rounded w-full"
-					/>
-				</form>
-				<h2 className="text-xl font-semibold mb-2">All Posts</h2>
-				<PostList posts={posts} />
-				<div className="flex justify-between items-center mt-8">
-					<button
-						onClick={() => fetchData(currentPage - 1)}
-						disabled={currentPage === 1}
-						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-					>
-						Previous Page
-					</button>
-					<p>
-						Page {currentPage} of {pages}
-					</p>
-					<button
-						onClick={() => fetchData(currentPage + 1)}
-						disabled={currentPage === pages}
-						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-					>
-						Next Page
-					</button>
+					<form onSubmit={handleSearch}>
+						<input
+							type="text"
+							id="search"
+							name="search"
+							value={searchTerm}
+							onChange={(event) =>
+								setSearchTerm(event.target.value)
+							}
+							placeholder="Search by title"
+							className="border-gray-400 border-2 py-2 px-4 rounded-lg w-full bg-slate-100"
+						/>
+					</form>
+				</div>
+				<div className="show-posts my-7">
+					<h2 className="text-xl font-semibold mb-2">All Posts</h2>
+					<PostList posts={posts} />
+					<div className="flex justify-between items-center mt-8">
+						<button
+							onClick={() => fetchData(currentPage - 1)}
+							disabled={currentPage === 1}
+							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+						>
+							Previous Page
+						</button>
+						<p>
+							Page {currentPage} of {pages}
+						</p>
+						<button
+							onClick={() => fetchData(currentPage + 1)}
+							disabled={currentPage === pages}
+							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+						>
+							Next Page
+						</button>
+					</div>
 				</div>
 			</div>
 		</AdminLayout>

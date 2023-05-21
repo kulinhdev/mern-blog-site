@@ -3,9 +3,9 @@ import { formatDate } from "../utils/common";
 
 function PostList({ posts }) {
 	return (
-		<div class="relative overflow-x-auto shadow-md sm:rounded-lg my-5">
+		<div class="relative overflow-x-auto shadow-md sm:rounded-lg my-7">
 			<table class="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
-				<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+				<thead class="text-xs text-gray-700 uppercase dark:text-gray-400 bg-gray-50 dark:bg-gray-700">
 					<tr>
 						<th scope="col" class="px-6 py-3">
 							Title
@@ -30,11 +30,11 @@ function PostList({ posts }) {
 						</th>
 					</tr>
 				</thead>
-				<tbody className="bg-white divide-y divide-gray-200">
+				<tbody className="divide-y divide-gray-200">
 					{posts.map((post) => (
 						<tr
 							key={post._id}
-							class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+							class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
 						>
 							<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
 								{post.title}
@@ -60,7 +60,7 @@ function PostList({ posts }) {
 								<div className="flex flex-col">
 									{post.tags.map((item, index) => (
 										<span
-											className="font-medium text-gray-900 my-2"
+											className="font-medium text-gray-400 my-2"
 											key={index}
 										>
 											{item.text}
