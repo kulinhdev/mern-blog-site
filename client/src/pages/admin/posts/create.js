@@ -11,14 +11,6 @@ const DynamicEditor = dynamic(
 		ssr: false, // Ensure the component is not rendered on the server
 	}
 );
-// import { CKEditor } from "@ckeditor/ckeditor5-react";
-// const DynamicEditor = dynamic(
-// 	() => import("@ckeditor/ckeditor5-react").then((module) => module.CKEditor),
-// 	{
-// 		ssr: false,
-// 	}
-// );
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const suggestions = [
 	{ id: "mango", text: "mango" },
@@ -157,7 +149,7 @@ function CreatePostPage() {
 							value={title}
 							onChange={(event) => setTitle(event.target.value)}
 							required
-							className="shadow appearance-none border rounded w-full py-2 px-3  text-slate-900 dark:text-slate-200 leading-tight focus:outline-none focus:shadow-outline"
+							className="appearance-none border rounded w-full py-2 px-3 text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 shadow-sm focus:outline-none focus:shadow-outline"
 						/>
 					</div>
 					<div className="mb-7">
@@ -176,7 +168,7 @@ function CreatePostPage() {
 									accept="image/*"
 									onChange={handleImageChange}
 									ref={fileInputRef}
-									className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-900 dark:text-slate-200 leading-tight focus:outline-none focus:shadow-outline"
+									className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 leading-tight focus:outline-none focus:shadow-outline"
 								/>
 							</div>
 							{selectedImage && (
@@ -206,6 +198,7 @@ function CreatePostPage() {
 						</label>
 						<DynamicEditor
 							data={content}
+							className="bg-slate-50 dark:bg-slate-700"
 							onReady={(editor) => {
 								// You can store the "editor" and use when it is needed.
 								console.log("Editor is ready to use!", editor);

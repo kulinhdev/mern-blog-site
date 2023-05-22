@@ -1,47 +1,27 @@
 import Link from "next/link";
 
-function Pagination({ currentPage, numPages }) {
-	const isFirst = currentPage === 1;
-	const isLast = currentPage === numPages;
-	const prevPage = `/page/${currentPage - 1}`;
-	const nextPage = `/page/${currentPage + 1}`;
-
-	if (numPages === 1) return null;
-
+const Pagination = ({ currentPage, pages, fetchPosts }) => {
 	return (
-		<div className="flex justify-center items-center my-8">
-			{!isFirst && (
-				<Link href={prevPage}>
-					<p className="pagination" rel="prev">
-						Previous
-					</p>
-				</Link>
-			)}
-			{Array.from({ length: numPages }, (_, i) => (
-				<Link key={`page-${i}`} href={`/page/${i + 1}`}>
-					<p
-						className={`${
-							currentPage === i + 1
-								? "bg-blue-500 hover:bg-blue-700 text-white"
-								: "text-gray-700 hover:text-black"
-						} pagination`}
-						aria-current={
-							currentPage === i + 1 ? "page" : undefined
-						}
-					>
-						{i + 1}
-					</p>
-				</Link>
-			))}
-			{!isLast && (
-				<Link href={nextPage}>
-					<p className="pagination" rel="next">
-						Next
-					</p>
-				</Link>
-			)}
+		<div className="flex justify-between items-center mt-8">
+			<button
+				onClick={() => fetchPosts(currentPage - 1)}
+				disabled={currentPage === 1}
+				className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+			>
+				Previous Page
+			</button>
+			<p className="text-xl text-slate-900 tracking-wide dark:text-slate-200">
+				Page {currentPage} of {pages}
+			</p>
+			<button
+				onClick={() => fetchPosts(currentPage + 1)}
+				disabled={currentPage === pages}
+				className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+			>
+				Next Page
+			</button>
 		</div>
 	);
-}
+};
 
 export default Pagination;

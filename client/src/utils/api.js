@@ -39,14 +39,12 @@ api.interceptors.request.use(
 	async (config) => {
 		let accessToken = Cookies.get("access_token");
 
-		console.log("accessToken request ==> ", accessToken);
-
 		// access_token expired, get new token
 		if (!accessToken) {
 			accessToken = await updateAccessToken();
 		}
 
-		console.log("accessToken new ==> ", accessToken);
+		// console.log("accessToken ==> ", accessToken);
 
 		config.headers.authorization = `Bearer ${accessToken}`;
 
@@ -69,7 +67,7 @@ api.interceptors.response.use(
 
 			const newAccessToken = await updateAccessToken();
 
-			console.log("newAccessToken ==> ", newAccessToken);
+			// console.log("newAccessToken ==> ", newAccessToken);
 
 			if (newAccessToken) {
 				// Resend original request with new access token

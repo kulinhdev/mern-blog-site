@@ -34,7 +34,7 @@ function PostListAdmin({ posts }) {
 					{posts.map((post) => (
 						<tr
 							key={post._id}
-							className="bg-gray-50 border-b dark:bg-gray-700 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-slate-900 dark:text-slate-200"
+							className="bg-gray-50 dark:bg-gray-700 border-b border-gray-700 dark:border-gray-100 hover:bg-gray-100 dark:hover:bg-gray-600 text-slate-900 dark:text-slate-200"
 						>
 							<td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
 								{post.title}

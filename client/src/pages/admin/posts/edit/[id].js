@@ -160,14 +160,16 @@ function EditPostPage() {
 							value={title}
 							onChange={(event) => setTitle(event.target.value)}
 							required
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-100 dark:text-slate-800 leading-tight focus:outline-none focus:shadow-outline"
+							className="appearance-none border rounded w-full py-2 px-3 text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 shadow-sm focus:outline-none focus:shadow-outline"
 						/>
 					</div>
 					<div className="mb-7">
 						<label
 							htmlFor="image"
 							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
-						></label>
+						>
+							Image
+						</label>
 						<div className="grid grid-cols-2 gap-2 content-center">
 							<div className="my-2 self-center">
 								<input
@@ -177,7 +179,7 @@ function EditPostPage() {
 									accept="image/*"
 									onChange={handleImageChange}
 									ref={fileInputRef}
-									className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-900 dark:text-slate-200 leading-tight focus:outline-none focus:shadow-outline"
+									className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 leading-tight focus:outline-none focus:shadow-outline"
 								/>
 							</div>
 							{selectedImage && (
@@ -248,7 +250,7 @@ function EditPostPage() {
 					<div className="flex items-center justify-between">
 						<button
 							type="submit"
-							className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+							className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 						>
 							Update Post
 						</button>

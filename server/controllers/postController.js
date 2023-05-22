@@ -5,9 +5,11 @@ const Post = require("../models/Post");
 
 async function getAllPosts(req, res) {
 	const page = req.query.page || 1;
-	const limit = 10;
+	const limit = req.query.limit || 5;
 	const skip = (page - 1) * limit;
 	const searchTerm = req.query.title || "";
+
+	console.log("Pagination ==> ", { page, limit, skip, searchTerm });
 
 	try {
 		const count = await Post.countDocuments({

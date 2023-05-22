@@ -64,7 +64,7 @@ const Index = () => {
 				>
 					Previous Page
 				</button>
-				<p>
+				<p className="text-xs text-slate-900 tracking-tight dark:text-slate-200">
 					Page {currentPage} of {pages}
 				</p>
 				<button

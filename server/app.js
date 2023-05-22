@@ -2,9 +2,9 @@ const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const configs = require("./config/keys");
-const postServerRoutes = require("./routes/postRoutes");
-const postClientRoutes = require("./routes/postRoutesClient");
-const authRoutes = require("./routes/authRoutes");
+const adminPostRoutes = require("./routes/adminPostRoutes");
+const clientPostRoutes = require("./routes/clientPostRoutes");
+const adminAuthRoutes = require("./routes/adminAuthRoutes");
 const connectToDatabase = require("./db/connect");
 const verifyToken = require("./middleware/auth");
 
@@ -25,9 +25,9 @@ app.use(
 );
 
 // Define routes
-app.use("/api/admin/posts", verifyToken, postServerRoutes);
-app.use("/api/posts", postClientRoutes);
-app.use("/api/auth", authRoutes);
+app.use("/api/admin/posts", verifyToken, adminPostRoutes);
+app.use("/api/posts", clientPostRoutes);
+app.use("/api/auth", adminAuthRoutes);
 
 // The API endpoint
 app.get(["/", "/home"], (req, res) => {
