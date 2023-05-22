@@ -1,9 +1,9 @@
+import AdminLayout from "@/components/layouts/AdminLayout";
+import { formatDate } from "@/utils/common";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import api from "@/utils/api";
 import Swal from "sweetalert2";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import AdminLayout from "../layout";
-import { formatDate } from "@/utils/common";
 
 function PostPage() {
 	const [post, setPost] = useState();

@@ -1,7 +1,7 @@
 import React from "react";
 import { Footer } from "flowbite-react";
 
-export const ClientFooter = () => {
+const ClientFooter = () => {
 	return (
 		<Footer
 			container={true}
@@ -18,3 +18,5 @@ export const ClientFooter = () => {
 		</Footer>
 	);
 };
+
+export default ClientFooter;

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { formatDate } from "../utils/common";
 
-function PostList({ posts }) {
+function PostListClient({ posts }) {
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 			{posts.map((post) => (
@@ -15,10 +15,10 @@ function PostList({ posts }) {
 						className="mb-4 w-full max-h-fit rounded-md"
 					/>
 					<h2 className="text-xl font-bold mb-2">{post.title}</h2>
-					<p className="text-gray-500 mb-4">
+					<div className="text-gray-500 mb-4">
 						{formatDate(post.createdAt)}
-					</p>
-					<p className="mb-4">
+					</div>
+					<div className="mb-4">
 						<div
 							dangerouslySetInnerHTML={{
 								__html:
@@ -27,7 +27,7 @@ function PostList({ posts }) {
 										: post.content,
 							}}
 						></div>
-					</p>
+					</div>
 					<Link href={`/client/posts/${post.slug}`}>
 						<p className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
 							Read More
@@ -39,4 +39,4 @@ function PostList({ posts }) {
 	);
 }
 
-export default PostList;
+export default PostListClient;

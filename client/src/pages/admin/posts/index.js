@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import PostList from "@/components/PostListAdmin";
-import api from "@/utils/api";
 import AdminLayout from "@/components/layouts/AdminLayout";
+import { useState, useEffect } from "react";
+import api from "@/utils/api";
 import Link from "next/link";
+import PostListAdmin from "@/components/PostListAdmin";
 
 function PostPage() {
 	const [posts, setPosts] = useState([]);
@@ -44,7 +44,9 @@ function PostPage() {
 	return (
 		<AdminLayout>
 			<div className="mega-page">
-				<h1 className="text-3xl font-bold mb-6">All Posts</h1>
+				<h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">
+					All Posts
+				</h1>
 				<Link
 					href="/admin/posts/create"
 					className="bg-blue-500 hover:bg-blue-700 inline-block mt-5 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -52,7 +54,9 @@ function PostPage() {
 					Create New
 				</Link>
 				<div className="search-box my-7">
-					<h2 className="text-xl font-semibold mb-2">Search</h2>
+					<h2 className="text-slate-900 tracking-tight dark:text-slate-200 text-xl font-semibold mb-2">
+						Search
+					</h2>
 					<form onSubmit={handleSearch}>
 						<input
 							type="text"
@@ -68,8 +72,10 @@ function PostPage() {
 					</form>
 				</div>
 				<div className="show-posts my-7">
-					<h2 className="text-xl font-semibold mb-2">All Posts</h2>
-					<PostList posts={posts} />
+					<h2 className="text-slate-900 tracking-tight dark:text-slate-200 text-xl font-semibold mb-2">
+						All Posts
+					</h2>
+					<PostListAdmin posts={posts} />
 					<div className="flex justify-between items-center mt-8">
 						<button
 							onClick={() => fetchData(currentPage - 1)}

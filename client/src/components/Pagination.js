@@ -12,14 +12,14 @@ function Pagination({ currentPage, numPages }) {
 		<div className="flex justify-center items-center my-8">
 			{!isFirst && (
 				<Link href={prevPage}>
-					<a className="pagination" rel="prev">
+					<p className="pagination" rel="prev">
 						Previous
-					</a>
+					</p>
 				</Link>
 			)}
 			{Array.from({ length: numPages }, (_, i) => (
 				<Link key={`page-${i}`} href={`/page/${i + 1}`}>
-					<a
+					<p
 						className={`${
 							currentPage === i + 1
 								? "bg-blue-500 hover:bg-blue-700 text-white"
@@ -30,14 +30,14 @@ function Pagination({ currentPage, numPages }) {
 						}
 					>
 						{i + 1}
-					</a>
+					</p>
 				</Link>
 			))}
 			{!isLast && (
 				<Link href={nextPage}>
-					<a className="pagination" rel="next">
+					<p className="pagination" rel="next">
 						Next
-					</a>
+					</p>
 				</Link>
 			)}
 		</div>

@@ -1,10 +1,11 @@
-import api from "@/utils/api";
-import { useRouter } from "next/router";
+import AdminLayout from "@/components/layouts/AdminLayout";
 import { useEffect, useState, useRef } from "react";
-import Swal from "sweetalert2";
-import AdminLayout from "../../layout";
+import { useRouter } from "next/router";
 import { WithContext as ReactTags } from "react-tag-input";
+import api from "@/utils/api";
 import dynamic from "next/dynamic"; // Import the dynamic function from Next.js
+import Swal from "sweetalert2";
+
 const DynamicEditor = dynamic(
 	() => import("../../../../components/DynamicEditor"),
 	{
@@ -137,13 +138,18 @@ function EditPostPage() {
 
 	return (
 		<AdminLayout>
-			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-				<h1 className="text-3xl font-bold mb-6">Edit Post</h1>
-				<form onSubmit={handleSubmit}>
-					<div className="mb-4">
+			<div className="mega-page">
+				<h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">
+					Edit Post
+				</h1>
+				<form
+					onSubmit={handleSubmit}
+					className="form rounded-lg p-5 border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 my-7"
+				>
+					<div className="mb-7">
 						<label
 							htmlFor="title"
-							className="block text-gray-700 font-bold mb-2"
+							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
 						>
 							Title
 						</label>
@@ -154,13 +160,13 @@ function EditPostPage() {
 							value={title}
 							onChange={(event) => setTitle(event.target.value)}
 							required
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-100 dark:text-slate-800 leading-tight focus:outline-none focus:shadow-outline"
 						/>
 					</div>
-					<div className="mb-4">
+					<div className="mb-7">
 						<label
 							htmlFor="image"
-							className="block text-gray-700 font-bold mb-2"
+							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
 						></label>
 						<div className="grid grid-cols-2 gap-2 content-center">
 							<div className="my-2 self-center">
@@ -171,7 +177,7 @@ function EditPostPage() {
 									accept="image/*"
 									onChange={handleImageChange}
 									ref={fileInputRef}
-									className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+									className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-900 dark:text-slate-200 leading-tight focus:outline-none focus:shadow-outline"
 								/>
 							</div>
 							{selectedImage && (
@@ -192,10 +198,10 @@ function EditPostPage() {
 							)}
 						</div>
 					</div>
-					<div className="mb-4">
+					<div className="mb-7">
 						<label
 							htmlFor="content"
-							className="block text-gray-700 font-bold mb-2"
+							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
 						>
 							Content
 						</label>
@@ -218,10 +224,10 @@ function EditPostPage() {
 							}}
 						/>
 					</div>
-					<div className="mb-4">
+					<div className="mb-7">
 						<label
 							htmlFor="tags"
-							className="block text-gray-700 font-bold mb-2"
+							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
 						>
 							Tags
 						</label>

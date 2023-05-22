@@ -1,31 +1,31 @@
 import Link from "next/link";
 import { formatDate } from "../utils/common";
 
-function PostList({ posts }) {
+function PostListAdmin({ posts }) {
 	return (
-		<div class="relative overflow-x-auto shadow-md sm:rounded-lg my-7">
-			<table class="table-fixed w-full text-sm text-left text-gray-500 dark:text-gray-400">
-				<thead class="text-xs text-gray-700 uppercase dark:text-gray-400 bg-gray-50 dark:bg-gray-700">
+		<div className="relative overflow-x-auto shadow-md sm:rounded-lg my-7">
+			<table className="table-fixed w-full text-sm text-left">
+				<thead className="text-xs uppercase text-slate-900 tracking-tight dark:text-slate-200 bg-gray-200 dark:bg-gray-600">
 					<tr>
-						<th scope="col" class="px-6 py-3">
+						<th scope="col" className="px-6 py-3">
 							Title
 						</th>
-						<th scope="col" class="px-6 py-3">
+						<th scope="col" className="px-6 py-3">
 							Slug
 						</th>
-						<th scope="col" class="px-6 py-3">
+						<th scope="col" className="px-6 py-3">
 							Image
 						</th>
-						<th scope="col" class="px-6 py-3">
+						<th scope="col" className="px-6 py-3">
 							Description
 						</th>
-						<th scope="col" class="px-6 py-3">
+						<th scope="col" className="px-6 py-3">
 							Tags
 						</th>
-						<th scope="col" class="px-6 py-3">
+						<th scope="col" className="px-6 py-3">
 							Created At
 						</th>
-						<th scope="col" class="px-6 py-3">
+						<th scope="col" className="px-6 py-3">
 							Action
 						</th>
 					</tr>
@@ -34,16 +34,16 @@ function PostList({ posts }) {
 					{posts.map((post) => (
 						<tr
 							key={post._id}
-							class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+							className="bg-gray-50 border-b dark:bg-gray-700 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-slate-900 dark:text-slate-200"
 						>
-							<td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+							<td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
 								{post.title}
 							</td>
-							<td class="px-6 py-4">{post.slug}</td>
-							<td class="px-6 py-4">
-								<img class="w-32" src={post.imageUrl}></img>
+							<td className="px-6 py-4">{post.slug}</td>
+							<td className="px-6 py-4">
+								<img className="w-32" src={post.imageUrl}></img>
 							</td>
-							<td class="px-6 py-4">
+							<td className="px-6 py-4">
 								<div
 									dangerouslySetInnerHTML={{
 										__html:
@@ -56,7 +56,7 @@ function PostList({ posts }) {
 									}}
 								></div>
 							</td>
-							<td class="px-6 py-4">
+							<td className="px-6 py-4">
 								<div className="flex flex-col">
 									{post.tags.map((item, index) => (
 										<span
@@ -74,14 +74,14 @@ function PostList({ posts }) {
 							<td className="px-6 py-4">
 								<div className=" flex text-right text-sm font-medium">
 									<Link href={`/admin/posts/${post._id}`}>
-										<p className="text-indigo-600 hover:text-indigo-900 mr-3 hover:underline">
+										<p className="text-base text-indigo-400 hover:text-indigo-600 mr-3 hover:underline">
 											View
 										</p>
 									</Link>
 									<Link
 										href={`/admin/posts/edit/${post._id}`}
 									>
-										<p className="text-yellow-600 hover:text-yellow-900 mr-3 hover:underline">
+										<p className="text-base text-yellow-400 hover:text-yellow-600 mr-3 hover:underline">
 											Edit
 										</p>
 									</Link>
@@ -95,4 +95,4 @@ function PostList({ posts }) {
 	);
 }
 
-export default PostList;
+export default PostListAdmin;

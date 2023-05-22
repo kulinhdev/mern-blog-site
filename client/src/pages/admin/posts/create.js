@@ -1,9 +1,10 @@
+import AdminLayout from "@/components/layouts/AdminLayout";
 import { useState, useRef } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
 import api from "@/utils/api";
-import Swal from "sweetalert2";
-import AdminLayout from "@/components/layouts/AdminLayout";
 import dynamic from "next/dynamic"; // Import the dynamic function from Next.js
+import Swal from "sweetalert2";
+
 const DynamicEditor = dynamic(
 	() => import("../../../components/DynamicEditor"),
 	{
@@ -135,12 +136,17 @@ function CreatePostPage() {
 	return (
 		<AdminLayout>
 			<div className="mega-page">
-				<h1 className="text-3xl font-bold mb-6">Create Post</h1>
-				<form onSubmit={handleSubmit}>
-					<div className="mb-4">
+				<h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">
+					Create Post
+				</h1>
+				<form
+					onSubmit={handleSubmit}
+					className="form rounded-lg p-5 border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 my-7"
+				>
+					<div className="mb-7">
 						<label
 							htmlFor="title"
-							className="block text-gray-700 font-bold mb-2"
+							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
 						>
 							Title
 						</label>
@@ -151,13 +157,13 @@ function CreatePostPage() {
 							value={title}
 							onChange={(event) => setTitle(event.target.value)}
 							required
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+							className="shadow appearance-none border rounded w-full py-2 px-3  text-slate-900 dark:text-slate-200 leading-tight focus:outline-none focus:shadow-outline"
 						/>
 					</div>
-					<div className="mb-4">
+					<div className="mb-7">
 						<label
 							htmlFor="image"
-							className="block text-gray-700 font-bold mb-2"
+							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
 						>
 							Image
 						</label>
@@ -170,7 +176,7 @@ function CreatePostPage() {
 									accept="image/*"
 									onChange={handleImageChange}
 									ref={fileInputRef}
-									className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+									className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-900 dark:text-slate-200 leading-tight focus:outline-none focus:shadow-outline"
 								/>
 							</div>
 							{selectedImage && (
@@ -191,10 +197,10 @@ function CreatePostPage() {
 							)}
 						</div>
 					</div>
-					<div className="mb-4">
+					<div className="mb-7">
 						<label
 							htmlFor="content"
-							className="block text-gray-700 font-bold mb-2"
+							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
 						>
 							Content
 						</label>
@@ -217,10 +223,10 @@ function CreatePostPage() {
 							}}
 						/>
 					</div>
-					<div className="mb-4">
+					<div className="mb-7">
 						<label
 							htmlFor="tags"
-							className="block text-gray-700 font-bold mb-2"
+							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
 						>
 							Tags
 						</label>

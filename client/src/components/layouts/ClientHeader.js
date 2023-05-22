@@ -1,13 +1,11 @@
 import Link from "next/link";
 
-function Header({ currentUser }) {
+function ClientHeader({ currentUser }) {
 	return (
 		<header className="bg-gray-900 text-white">
 			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
 				<Link href="/">
-					<a>
-						<h1 className="text-xl font-bold">My Blog</h1>
-					</a>
+					<h1 className="text-xl font-bold">PNL Blog</h1>
 				</Link>
 				<nav>
 					<ul className="flex space-x-4">
@@ -15,12 +13,12 @@ function Header({ currentUser }) {
 							<>
 								<li>
 									<Link href="/admin">
-										<a>Admin</a>
+										<p>Admin</p>
 									</Link>
 								</li>
 								<li>
 									<Link href="/logout">
-										<a>Logout</a>
+										<p>Logout</p>
 									</Link>
 								</li>
 							</>
@@ -28,12 +26,12 @@ function Header({ currentUser }) {
 							<>
 								<li>
 									<Link href="/signup">
-										<a>Sign Up</a>
+										<p>Sign Up</p>
 									</Link>
 								</li>
 								<li>
 									<Link href="/login">
-										<a>Login</a>
+										<p>Login</p>
 									</Link>
 								</li>
 							</>
@@ -45,4 +43,4 @@ function Header({ currentUser }) {
 	);
 }
 
-export default Header;
+export default ClientHeader;

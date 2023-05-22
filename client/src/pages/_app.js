@@ -1,7 +1,8 @@
-import "@/styles/globals.css";
-import Script from "next/script";
 import { config } from "@fortawesome/fontawesome-svg-core";
+
+import "@/styles/globals.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+
 config.autoAddCss = false;
 
 export default function App({ Component, pageProps }) {

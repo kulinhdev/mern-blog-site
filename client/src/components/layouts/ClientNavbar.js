@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { DarkThemeToggle, Flowbite } from "flowbite-react";
 
-export default function NavBar() {
+export default function ClientNavbar() {
 	const [isLogin, setIsLogin] = useState(false);
 
 	useEffect(() => {
@@ -19,7 +19,7 @@ export default function NavBar() {
 	return (
 		<nav className="bg-gray-300 border-gray-200 dark:bg-gray-900">
 			<div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-				<a href="https://flowbite.com/" className="flex items-center">
+				<p href="https://flowbite.com/" className="flex items-center">
 					<img
 						src="https://flowbite.com/docs/images/logo.svg"
 						className="h-8 mr-3"
@@ -28,7 +28,7 @@ export default function NavBar() {
 					<span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
 						PNL Blog
 					</span>
-				</a>
+				</p>
 				<div
 					className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
 					id="mobile-menu-2"
@@ -51,20 +51,20 @@ export default function NavBar() {
 							</p>
 						</Link>
 						<li>
-							<a
+							<p
 								href="#"
 								className="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
 							>
 								About
-							</a>
+							</p>
 						</li>
 						<li>
-							<a
+							<p
 								href="#"
 								className="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
 							>
 								Contact
-							</a>
+							</p>
 						</li>
 					</ul>
 				</div>
@@ -109,28 +109,28 @@ export default function NavBar() {
 									aria-labelledby="user-menu-button"
 								>
 									<li>
-										<a
+										<p
 											href="#"
 											className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
 										>
 											Profile
-										</a>
+										</p>
 									</li>
 									<li>
-										<a
+										<p
 											href="#"
 											className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
 										>
 											My favorites
-										</a>
+										</p>
 									</li>
 									<li>
-										<a
+										<p
 											href="#"
 											className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
 										>
 											Sign out
-										</a>
+										</p>
 									</li>
 								</ul>
 							</div>

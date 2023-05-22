@@ -14,7 +14,7 @@ export function setRefreshTokenAdmin(refreshToken) {
 }
 
 // Format: Thursday, May 18, 2023
-export function formatDate(dateString) {
+export function formatDate(dateString, isMinRead = false) {
 	const date = new Date(dateString);
 
 	const options = {
@@ -28,5 +28,5 @@ export function formatDate(dateString) {
 
 	const minutes = 10; // Assuming it's a constant for now
 
-	return `${formattedDate} — ${minutes} min read`;
-};
+	return `${formattedDate} ${isMinRead ? " — " + minutes + "min read" : ""} `;
+}
