@@ -35,27 +35,23 @@
 
 /* Styles for the input */
 .ReactTags__tagInput {
-	@apply w-72 rounded-md inline-block;
+	@apply w-72 rounded-md inline-block my-3;
 }
 
 .ReactTags__tagInput input.ReactTags__tagInputField,
 .ReactTags__tagInput input.ReactTags__tagInputField:focus {
-	@apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight bg-slate-50 dark:bg-slate-700;
+	@apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-100 leading-tight bg-slate-50 dark:bg-slate-700;
 }
 
 /* Styles for the input */
-/* .ReactTags__editTagInput {
-	@apply w-72 rounded-md inline-block;
-} */
-
 .ReactTags__editTagInput input.ReactTags__editTagInputField,
 .ReactTags__editTagInput input.ReactTags__editTagInputField:focus {
-	@apply shadow appearance-none border rounded py-1 px-2 text-gray-700 leading-tight;
+	@apply py-1 px-2 bg-slate-50 dark:bg-slate-700 text-gray-700 dark:text-gray-100 leading-tight;
 }
 
 /* Styles for selected tags */
 .ReactTags__selected span.ReactTags__tag {
-	@apply inline-block px-3 py-1 mr-2 my-2 text-white bg-blue-500 border border-gray-400 rounded-md text-sm;
+	@apply inline-block px-3 py-1 mr-2 my-2 text-white bg-blue-500 border border-gray-400 text-gray-700 dark:text-gray-100 rounded-md text-sm;
 }
 
 .ReactTags__selected button.ReactTags__remove {

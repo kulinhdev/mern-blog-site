@@ -75,6 +75,12 @@ function EditPostPage() {
 		console.log("The tag at index " + index + " was clicked");
 	};
 
+	const handleTagUpdate = (editIndex, updatedTag) => {
+		const updatedTags = [...tags];
+		updatedTags[editIndex] = updatedTag;
+		setTags(updatedTags);
+	};
+
 	const handleImageChange = (event) => {
 		const file = event.target.files[0];
 		console.log("file", file);
@@ -241,6 +247,7 @@ function EditPostPage() {
 							handleAddition={handleAddition}
 							handleDrag={handleDrag}
 							handleTagClick={handleTagClick}
+							onTagUpdate={handleTagUpdate}
 							inputFieldPosition="bottom"
 							placeholder="Enter tags..."
 							autocomplete

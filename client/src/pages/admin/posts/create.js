@@ -46,6 +46,8 @@ function CreatePostPage() {
 	const handleDrag = (tag, currPos, newPos) => {
 		const newTags = tags.slice();
 
+		console.log(tag, currPos, newPos, newTags);
+
 		newTags.splice(currPos, 1);
 		newTags.splice(newPos, 0, tag);
 
@@ -55,6 +57,12 @@ function CreatePostPage() {
 
 	const handleTagClick = (index) => {
 		console.log("The tag at index " + index + " was clicked");
+	};
+
+	const handleTagUpdate = (editIndex, updatedTag) => {
+		const updatedTags = [...tags];
+		updatedTags[editIndex] = updatedTag;
+		setTags(updatedTags);
 	};
 
 	const handleImageChange = (event) => {
@@ -231,6 +239,7 @@ function CreatePostPage() {
 							handleAddition={handleAddition}
 							handleDrag={handleDrag}
 							handleTagClick={handleTagClick}
+							onTagUpdate={handleTagUpdate}
 							inputFieldPosition="bottom"
 							placeholder="Enter tags..."
 							autocomplete

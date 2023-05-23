@@ -247,7 +247,7 @@ function AdminNavbar() {
 							<Sidebar.Collapse
 								label="Posts"
 								className={`${
-									router.pathname === "/admin/posts"
+									router.pathname.includes("/admin/posts")
 										? " bg-gray-100 dark:bg-gray-700"
 										: ""
 								}`}
