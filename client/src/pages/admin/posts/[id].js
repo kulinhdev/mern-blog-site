@@ -71,13 +71,13 @@ function PostPage() {
 		<AdminLayout>
 			<div className="mega-page">
 				{post && (
-					<div className="bg-gray-200 rounded-lg shadow-lg px-6 py-8">
-						<h1 className="text-3xl font-bold mb-6">
+					<div className="text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 rounded-lg shadow-lg px-6 py-8">
+						<h1 className="text-3xl bg-slate-50 dark:bg-slate-700 font-bold mb-6">
 							{post.title}
 						</h1>
 						<div className="my-8">
 							<span className="text-lg font-bold mr-3">
-								{formatDate(post.createdAt)}
+								{formatDate(post.createdAt, true)}
 							</span>
 						</div>
 						{post.imageUrl && (

@@ -5,6 +5,7 @@ const configs = require("./config/keys");
 const adminPostRoutes = require("./routes/adminPostRoutes");
 const clientPostRoutes = require("./routes/clientPostRoutes");
 const adminAuthRoutes = require("./routes/adminAuthRoutes");
+const adminCategoryRoutes = require("./routes/adminCategoryRoutes");
 const connectToDatabase = require("./db/connect");
 const verifyToken = require("./middleware/auth");
 
@@ -26,6 +27,7 @@ app.use(
 
 // Define routes
 app.use("/api/admin/posts", verifyToken, adminPostRoutes);
+app.use("/api/admin/categories", verifyToken, adminCategoryRoutes);
 app.use("/api/posts", clientPostRoutes);
 app.use("/api/auth", adminAuthRoutes);
 

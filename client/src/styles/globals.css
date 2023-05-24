@@ -51,7 +51,7 @@
 
 /* Styles for selected tags */
 .ReactTags__selected span.ReactTags__tag {
-	@apply inline-block px-3 py-1 mr-2 my-2 text-white bg-blue-500 border border-gray-400 text-gray-700 dark:text-gray-100 rounded-md text-sm;
+	@apply inline-block px-3 py-1 mr-2 my-2 bg-blue-500 border border-gray-400 text-gray-700 dark:text-gray-100 rounded-md text-sm;
 }
 
 .ReactTags__selected button.ReactTags__remove {
