@@ -1,5 +1,5 @@
 import AdminLayout from "@/components/layouts/AdminLayout";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
 import api from "@/utils/api";
 import dynamic from "next/dynamic"; // Import the dynamic function from Next.js
@@ -11,11 +11,6 @@ const DynamicEditor = dynamic(
 		ssr: false, // Ensure the component is not rendered on the server
 	}
 );
-
-const suggestions = [
-	{ id: "mango", text: "mango" },
-	{ id: "pineapple", text: "pineapple" },
-];
 
 const KeyCodes = {
 	comma: 188,
@@ -29,15 +24,24 @@ function CreatePostPage() {
 	const [content, setContent] = useState("");
 	const [selectedImage, setSelectedImage] = useState(null);
 	const fileInputRef = useRef(null);
-	const [tags, setTags] = useState([
-		{ id: "Technology", text: "Technology" },
-		{ id: "Learning", text: "Learning" },
-		{ id: "Skill", text: "Skill" },
-	]);
+	const [tags, setTags] = useState([]);
+	const [suggestionTags, setSuggestionTags] = useState();
+	const [selectedCategories, setSelectedCategories] = useState();
+	const [suggestionCates, setSuggestionCates] = useState();
 
-	const handleDelete = (i) => {
-		setTags(tags.filter((tag, index) => index !== i));
-	};
+	useEffect(() => {
+		setSuggestionTags([
+			{ id: "mango", text: "mango" },
+			{ id: "pineapple", text: "pineapple" },
+		]);
+
+		const fetchCategories = async () => {
+			const response = await api.get(`/api/admin/categories`);
+			setSuggestionCates(response.data.categories);
+		};
+
+		fetchCategories();
+	}, []);
 
 	const handleAddition = (tag) => {
 		setTags([...tags, { id: tag.text, text: tag.text }]);
@@ -51,18 +55,17 @@ function CreatePostPage() {
 		newTags.splice(currPos, 1);
 		newTags.splice(newPos, 0, tag);
 
-		// re-render
 		setTags(newTags);
-	};
-
-	const handleTagClick = (index) => {
-		console.log("The tag at index " + index + " was clicked");
 	};
 
 	const handleTagUpdate = (editIndex, updatedTag) => {
 		const updatedTags = [...tags];
 		updatedTags[editIndex] = updatedTag;
 		setTags(updatedTags);
+	};
+
+	const handleDelete = (i) => {
+		setTags(tags.filter((tag, index) => index !== i));
 	};
 
 	const handleImageChange = (event) => {
@@ -78,11 +81,22 @@ function CreatePostPage() {
 		setSelectedImage(null);
 	};
 
+	const handleCategorySelection = (event) => {
+		const selectedOptions = Array.from(event.target.options)
+			.filter((option) => option.selected)
+			.map((option) => option.value);
+
+		console.log(selectedOptions);
+
+		setSelectedCategories(selectedOptions);
+	};
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const adminLogin = localStorage.getItem("admin");
 		const authorId = JSON.parse(adminLogin).id;
 		const tagsString = JSON.stringify(tags);
+		const categoriesString = JSON.stringify(selectedCategories);
 		const imageFile = event.target.image.files[0];
 
 		console.log("params ==> ", tagsString, imageFile);
@@ -92,6 +106,7 @@ function CreatePostPage() {
 			formData.append("title", title);
 			formData.append("content", content);
 			formData.append("tags", tagsString);
+			formData.append("categories", categoriesString);
 			formData.append("author", authorId);
 			formData.append("image", imageFile);
 
@@ -226,6 +241,27 @@ function CreatePostPage() {
 					</div>
 					<div className="mb-7">
 						<label
+							for="categories_multiple"
+							class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+						>
+							Select categories
+						</label>
+						<select
+							multiple
+							onChange={handleCategorySelection}
+							id="categories_multiple"
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+						>
+							{suggestionCates &&
+								suggestionCates.map((cate) => (
+									<option key={cate.id} value={cate.id}>
+										{cate.title}
+									</option>
+								))}
+						</select>
+					</div>
+					<div className="mb-7">
+						<label
 							htmlFor="tags"
 							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
 						>
@@ -233,12 +269,11 @@ function CreatePostPage() {
 						</label>
 						<ReactTags
 							tags={tags}
-							suggestions={suggestions}
+							suggestions={suggestionTags}
 							delimiters={delimiters}
 							handleDelete={handleDelete}
 							handleAddition={handleAddition}
 							handleDrag={handleDrag}
-							handleTagClick={handleTagClick}
 							onTagUpdate={handleTagUpdate}
 							inputFieldPosition="bottom"
 							placeholder="Enter tags..."

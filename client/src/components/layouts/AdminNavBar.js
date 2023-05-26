@@ -267,12 +267,33 @@ function AdminNavbar() {
 									}
 								/>
 							</Sidebar.Collapse>
-							<CustomSidebarItem
+							<Sidebar.Collapse
+								label="Categories"
+								className={`${
+									router.pathname.includes(
+										"/admin/categories"
+									)
+										? " bg-gray-100 dark:bg-gray-700"
+										: ""
+								}`}
 								icon={FolderIcon}
-								href="/admin/categories"
-								name="Categories"
-								active={router.pathname === "/admin/categories"}
-							/>
+							>
+								<CustomSidebarItem
+									href="/admin/categories"
+									name="All Categories"
+									active={
+										router.pathname === "/admin/categories"
+									}
+								/>
+								<CustomSidebarItem
+									href="/admin/categories/create"
+									name="Create Category"
+									active={
+										router.pathname ===
+										"/admin/categories/create"
+									}
+								/>
+							</Sidebar.Collapse>
 							<CustomSidebarItem
 								icon={UserGroupIcon}
 								href="/admin/users"

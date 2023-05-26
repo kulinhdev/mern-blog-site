@@ -5,20 +5,19 @@ import { useState, useEffect } from "react";
 import api from "@/utils/api";
 import Swal from "sweetalert2";
 
-function PostPage() {
-	const [post, setPost] = useState();
+function CategoryPage() {
+	const [category, setCategory] = useState();
 	const router = useRouter();
 
 	useEffect(() => {
 		const { id } = router.query;
-		console.log("query", router.query);
 		const fetchData = async () => {
-			const response = await api.get(`/api/admin/posts/${id}`);
+			const response = await api.get(`/api/admin/categories/${id}`);
 
 			console.log(response);
 
-			if (response.status === 200 && response.data.post) {
-				setPost(response.data.post);
+			if (response.status === 200) {
+				setCategory(response.data.category);
 			}
 		};
 
@@ -27,7 +26,7 @@ function PostPage() {
 
 	const handleDelete = () => {
 		Swal.fire({
-			title: "Are you sure you want to delete this post?",
+			title: "Are you sure you want to delete this category?",
 			text: "You won't be able to revert this!",
 			icon: "warning",
 			showCancelButton: true,
@@ -42,8 +41,9 @@ function PostPage() {
 
 		const confirmDelete = async () => {
 			try {
-				console.log(post._id);
-				const res = await api.delete(`/api/admin/posts/${post._id}`);
+				const res = await api.delete(
+					`/api/admin/categories/${category._id}`
+				);
 
 				// Display success message
 				Swal.fire({
@@ -53,12 +53,12 @@ function PostPage() {
 					showConfirmButton: false,
 					timer: 1500,
 				});
-				router.push("/admin/posts");
+				router.push("/admin/categories");
 			} catch (error) {
 				console.error("Delete error ==> ", error);
 				Swal.fire({
 					icon: "error",
-					title: "Delete post failed!",
+					title: "Delete category failed!",
 					text: "Error occurs ..!",
 					confirmButtonColor: "#3085d6",
 					confirmButtonText: "OK",
@@ -70,21 +70,21 @@ function PostPage() {
 	return (
 		<AdminLayout>
 			<div className="mega-page">
-				{post && (
+				{category && (
 					<div className="text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 rounded-lg shadow-lg px-6 py-8">
 						<h1 className="text-3xl bg-slate-50 dark:bg-slate-700 font-bold mb-6">
-							{post.title}
+							{category.title}
 						</h1>
 						<div className="my-8">
 							<span className="text-lg font-bold mr-3">
-								{formatDate(post.createdAt, true)}
+								{formatDate(category.createdAt, true)}
 							</span>
 						</div>
-						{post.imageUrl && (
+						{category.imageUrl && (
 							<img
-								src={post.imageUrl}
-								alt={post.title}
-								className="mb-6 rounded-lg"
+								src={category.imageUrl}
+								alt={category.title}
+								className="mb-6 w-60 rounded-lg"
 							/>
 						)}
 						<div className="my-8">
@@ -92,51 +92,26 @@ function PostPage() {
 								Slug:
 							</span>{" "}
 							<span className="bg-orange-500 text-white font-medium py-1 px-2 rounded-full">
-								{post.slug}
+								{category.slug}
 							</span>
 						</div>
-						<div className="flex items-center space-x-5 my-8">
-							<span className="text-lg font-bold mr-3">
-								Tags:
-							</span>{" "}
-							{post.tags &&
-								post.tags.map((tag) => (
-									<span
-										key={tag.id}
-										className="bg-blue-500 text-white font-medium py-1 px-2 rounded-full"
-									>
-										{tag.text}
-									</span>
-								))}
-						</div>
-						<div className="flex items-center space-x-5 my-8">
-							<span className="text-lg font-bold mr-3">
-								Categories:
-							</span>{" "}
-							{post.categories &&
-								post.categories.map((category) => (
-									<span
-										key={category.id}
-										className="bg-purple-500 text-white font-medium py-1 px-2 rounded-full"
-									>
-										{category.title}
-									</span>
-								))}
-						</div>
-						<div className="mb-6">
+						<div className="my-8">
 							<span className="text-lg font-bold mr-3">
 								Content:
 							</span>
-							<p
+							<div
+								className="my-2"
 								dangerouslySetInnerHTML={{
-									__html: post.content,
+									__html: category.content,
 								}}
-							></p>{" "}
+							></div>
 						</div>
 						<div className="flex justify-end mt-8">
 							<button
 								onClick={() =>
-									router.push(`/admin/posts/edit/${post._id}`)
+									router.push(
+										`/admin/categories/edit/${category._id}`
+									)
 								}
 								className="bg-blue-500 hover:bg-blue-700 rounded-lg text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline"
 							>
@@ -157,4 +132,4 @@ function PostPage() {
 	);
 }
 
-export default PostPage;
+export default CategoryPage;

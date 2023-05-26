@@ -1,10 +1,10 @@
 import Link from "next/link";
 
-const Pagination = ({ currentPage, pages, fetchPosts }) => {
+const Pagination = ({ currentPage, pages, switchPage }) => {
 	return (
 		<div className="flex justify-between items-center mt-8">
 			<button
-				onClick={() => fetchPosts(currentPage - 1)}
+				onClick={() => switchPage(currentPage - 1)}
 				disabled={currentPage === 1}
 				className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 			>
@@ -14,7 +14,7 @@ const Pagination = ({ currentPage, pages, fetchPosts }) => {
 				Page {currentPage} of {pages}
 			</p>
 			<button
-				onClick={() => fetchPosts(currentPage + 1)}
+				onClick={() => switchPage(currentPage + 1)}
 				disabled={currentPage === pages}
 				className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 			>

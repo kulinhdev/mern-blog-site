@@ -1,7 +1,7 @@
-import AdminLayout from "@/components/layouts/AdminLayout";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { WithContext as ReactTags } from "react-tag-input";
+import AdminLayout from "@/components/layouts/AdminLayout";
 import api from "@/utils/api";
 import dynamic from "next/dynamic"; // Import the dynamic function from Next.js
 import Swal from "sweetalert2";
@@ -12,10 +12,6 @@ const DynamicEditor = dynamic(
 		ssr: false, // Ensure the component is not rendered on the server
 	}
 );
-const suggestions = [
-	{ id: "mango", text: "mango" },
-	{ id: "pineapple", text: "pineapple" },
-];
 
 const KeyCodes = {
 	comma: 188,
@@ -28,29 +24,45 @@ function EditPostPage() {
 	const router = useRouter();
 	const [postId, setPostId] = useState("");
 	const [title, setTitle] = useState("");
-	const [tags, setTags] = useState([]);
 	const [content, setContent] = useState("");
 	const [selectedImage, setSelectedImage] = useState(null);
 	const fileInputRef = useRef(null);
+	const [tags, setTags] = useState([]);
+	const [suggestionTags, setSuggestionTags] = useState();
+	const [selectedCategories, setSelectedCategories] = useState();
+	const [suggestionCates, setSuggestionCates] = useState();
 
 	useEffect(() => {
 		const { id } = router.query;
-		console.log(router.query);
 		setPostId(id);
-		const fetchData = async () => {
+		setSuggestionTags([
+			{ id: "mango", text: "mango" },
+			{ id: "pineapple", text: "pineapple" },
+		]);
+
+		const fetchPost = async () => {
 			const response = await api.get(`/api/admin/posts/${id}`);
 
-			console.log(response.data);
+			console.log(response);
 
-			if (response.status === 200) {
-				setTitle(response.data?.title);
-				setContent(response.data?.content);
-				setSelectedImage(response.data?.imageUrl);
-				setTags(response.data?.tags);
+			const post = response.data.post;
+
+			if (response.status === 200 && post) {
+				setTitle(post.title);
+				setContent(post.content);
+				setSelectedImage(post.imageUrl);
+				setTags(post.tags);
 			}
 		};
 
-		fetchData();
+		const fetchCategories = async () => {
+			const response = await api.get(`/api/admin/categories`);
+			setSuggestionCates(response.data.categories);
+		};
+
+		fetchCategories();
+
+		if (id) fetchPost();
 	}, [router.query]);
 
 	const handleDelete = (i) => {
@@ -95,11 +107,22 @@ function EditPostPage() {
 		setSelectedImage(null);
 	};
 
+	const handleCategorySelection = (event) => {
+		const selectedOptions = Array.from(event.target.options)
+			.filter((option) => option.selected)
+			.map((option) => option.value);
+
+		console.log(selectedOptions);
+
+		setSelectedCategories(selectedOptions);
+	};
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const adminLogin = localStorage.getItem("admin");
 		const authorId = JSON.parse(adminLogin).id;
 		const tagsString = JSON.stringify(tags);
+		const categoriesString = JSON.stringify(selectedCategories);
 		const imageFile = event.target.image.files[0];
 
 		console.log("params ==> ", tagsString, imageFile);
@@ -109,6 +132,7 @@ function EditPostPage() {
 			formData.append("title", title);
 			formData.append("content", content);
 			formData.append("tags", tagsString);
+			formData.append("categories", categoriesString);
 			formData.append("author", authorId);
 			formData.append("image", imageFile);
 
@@ -234,6 +258,27 @@ function EditPostPage() {
 					</div>
 					<div className="mb-7">
 						<label
+							for="categories_multiple"
+							class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+						>
+							Select categories
+						</label>
+						<select
+							multiple
+							onChange={handleCategorySelection}
+							id="categories_multiple"
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+						>
+							{suggestionCates &&
+								suggestionCates.map((cate) => (
+									<option key={cate.id} value={cate.id}>
+										{cate.title}
+									</option>
+								))}
+						</select>
+					</div>
+					<div className="mb-7">
+						<label
 							htmlFor="tags"
 							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
 						>
@@ -241,12 +286,11 @@ function EditPostPage() {
 						</label>
 						<ReactTags
 							tags={tags}
-							suggestions={suggestions}
+							suggestions={suggestionTags}
 							delimiters={delimiters}
 							handleDelete={handleDelete}
 							handleAddition={handleAddition}
 							handleDrag={handleDrag}
-							handleTagClick={handleTagClick}
 							onTagUpdate={handleTagUpdate}
 							inputFieldPosition="bottom"
 							placeholder="Enter tags..."

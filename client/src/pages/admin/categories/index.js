@@ -2,42 +2,40 @@ import AdminLayout from "@/components/layouts/AdminLayout";
 import { useState, useEffect } from "react";
 import api from "@/utils/api";
 import Link from "next/link";
-import PostListAdmin from "@/components/PostListAdmin";
+import CategoryListAdmin from "@/components/CategoryListAdmin";
 import Pagination from "@/components/Pagination";
 
-function PostPage() {
-	const [posts, setPosts] = useState([]);
+function CategoryPage() {
+	const [categories, setCategories] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [pages, setPages] = useState(1);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [limit, setLimit] = useState(5);
 
-	const fetchPostsByCondition = async (page = 1) => {
+	const fetchCategoriesByCondition = async (page = 1) => {
 		const response = await api.get(
-			`/api/admin/posts/search?page=${page}&limit=${limit}&title=${searchTerm}`
+			`/api/admin/categories/search?page=${page}&limit=${limit}&title=${searchTerm}`
 		);
 		setCurrentPage(page);
 		setPages(Math.ceil(response.data.count / limit));
-		setPosts(response.data.posts);
+		setCategories(response.data.categories);
 	};
 
 	useEffect(() => {
-		const fetchPosts = async () => {
-			const response = await api.get("/api/admin/posts");
-
-			console.log("posts", response);
+		const fetchCategories = async () => {
+			const response = await api.get("/api/admin/categories");
 
 			if (response.status === 200) {
 				setPages(Math.ceil(response.data.count / 5));
-				setPosts(response.data?.posts);
+				setCategories(response.data?.categories);
 			}
 		};
 
-		fetchPosts();
+		fetchCategories();
 	}, []);
 
 	useEffect(() => {
-		fetchPostsByCondition();
+		fetchCategoriesByCondition();
 	}, [limit, searchTerm]);
 
 	const handleLimitChange = (event) => {
@@ -58,10 +56,10 @@ function PostPage() {
 		<AdminLayout>
 			<div className="mega-page">
 				<h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">
-					All Posts
+					All Categories
 				</h1>
 				<Link
-					href="/admin/posts/create"
+					href="/admin/categories/create"
 					className="bg-blue-500 hover:bg-blue-700 inline-block mt-5 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 				>
 					Create New
@@ -93,15 +91,15 @@ function PostPage() {
 						</select>
 					</form>
 				</div>
-				<div className="show-posts my-7">
+				<div className="show-categories my-7">
 					<h2 className="text-slate-900 tracking-tight dark:text-slate-200 text-xl font-semibold mb-2">
-						All Posts
+						All Categories
 					</h2>
-					<PostListAdmin posts={posts} />
+					<CategoryListAdmin categories={categories} />
 					<Pagination
 						currentPage={currentPage}
 						pages={pages}
-						switchPage={fetchPostsByCondition}
+						switchPage={fetchCategories}
 					/>
 				</div>
 			</div>
@@ -109,4 +107,4 @@ function PostPage() {
 	);
 }
 
-export default PostPage;
+export default CategoryPage;

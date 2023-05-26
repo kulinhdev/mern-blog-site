@@ -11,8 +11,6 @@ const verifyToken = (req, res, next) => {
 	// Bearer <access_token>
 	const token = requestToken?.split(" ")[1];
 
-	// console.log("Middleware receive token ==> ", typeof token);
-
 	if (!token) {
 		return res
 			.status(401)
@@ -21,9 +19,9 @@ const verifyToken = (req, res, next) => {
 	try {
 		const decoded = jwt.verify(token, configs.JWTSecret);
 		req.user = decoded;
-		console.log("Middleware decoded ==> ", decoded);
+		// console.log("Middleware decoded ==> ", decoded);
 	} catch (err) {
-		console.log("Middleware error ==> " + err.message);
+		// console.log("Middleware Error ==> " + err.message);
 		return res
 			.status(401)
 			.send("Unauthorized - Invalid Token: " + err.message);
@@ -45,4 +43,4 @@ const authorizeAdmin = (req, res, next) => {
 	next();
 };
 
-module.exports = verifyToken;
+module.exports = { verifyToken, authorizeAdmin, authorizeUser };

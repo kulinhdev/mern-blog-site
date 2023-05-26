@@ -17,6 +17,10 @@ const CategorySchema = new mongoose.Schema(
 			required: true,
 			unique: true,
 		},
+		content: {
+			type: String,
+			required: true,
+		},
 	},
 	{ timestamps: true }
 );

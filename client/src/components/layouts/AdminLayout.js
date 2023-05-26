@@ -11,11 +11,12 @@ const AdminLayout = ({ children }) => {
 		const accessToken = Cookies.get("access_token");
 		const adminLogin = localStorage.getItem("admin");
 
-		console.log("adminCheck ==> ", router.pathname, {
-			refreshToken,
-			accessToken,
-			adminLogin,
-		});
+		// console.log("adminCheck ==> ", {
+		// 	route: router.pathname,
+		// 	refreshToken,
+		// 	accessToken,
+		// 	adminLogin,
+		// });
 
 		if (!refreshToken || !adminLogin) {
 			router.push("/admin/auth/login");

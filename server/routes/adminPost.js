@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const postController = require("../controllers/postController");
+const postController = require("../controllers/postAdminController");
 const upload = require("../config/uploadFile");
 
 router.get("/", postController.getAllPosts);
+
+router.get("/search", postController.getPostsByCondition);
 
 router.get("/:id", postController.getPostById);
 
