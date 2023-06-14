@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ClientNavbar() {
+function ClientNav() {
 	const [isLogin, setIsLogin] = useState(false);
 
 	useEffect(() => {
@@ -176,3 +176,5 @@ export default function ClientNavbar() {
 		</nav>
 	);
 }
+
+export default ClientNav;

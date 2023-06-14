@@ -10,17 +10,9 @@ import {
 	HashtagIcon,
 	MagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
-import {
-	Navbar,
-	Dropdown,
-	Avatar,
-	Sidebar,
-	DarkThemeToggle,
-	Flowbite,
-	TextInput,
-} from "flowbite-react";
+import { Navbar, Dropdown, Avatar, Sidebar, TextInput } from "flowbite-react";
 
-export default function AdminNavbar() {
+function AdminNav() {
 	const router = useRouter();
 	const [adminAccount, setAdminAccount] = useState(null);
 
@@ -311,3 +303,5 @@ export default function AdminNavbar() {
 		</div>
 	);
 }
+
+export default AdminNav;
