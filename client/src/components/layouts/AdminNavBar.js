@@ -1,7 +1,5 @@
 import { useRouter } from "next/router";
-import Image from "next/image";
 import Link from "next/link";
-import { NextLink } from "next/link";
 import React, { useEffect, useState } from "react";
 
 import {

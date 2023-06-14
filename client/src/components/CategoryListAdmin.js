@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { formatDate } from "@/utils/common";
+import Link from "next/link";
 
 function CategoryListAdmin({ categories }) {
 	return (

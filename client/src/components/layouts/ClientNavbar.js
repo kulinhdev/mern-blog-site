@@ -1,8 +1,8 @@
-import Image from "next/image";
-import Link from "next/link";
+import { DarkThemeToggle, Flowbite } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { DarkThemeToggle, Flowbite } from "flowbite-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function ClientNavbar() {
 	const [isLogin, setIsLogin] = useState(false);
