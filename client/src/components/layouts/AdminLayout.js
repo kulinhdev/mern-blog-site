@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import AdminNavbar from "./AdminNavbar";
+import AdminNavbar from "@/components/layouts/AdminNavbar";
 
 const AdminLayout = ({ children }) => {
 	const router = useRouter();

@@ -22,7 +22,7 @@ import {
 	TextInput,
 } from "flowbite-react";
 
-function AdminNavbar() {
+export default function AdminNavbar() {
 	const router = useRouter();
 	const [adminAccount, setAdminAccount] = useState(null);
 
@@ -313,5 +313,3 @@ function AdminNavbar() {
 		</div>
 	);
 }
-
-export default AdminNavbar;
