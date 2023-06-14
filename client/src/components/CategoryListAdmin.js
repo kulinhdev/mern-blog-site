@@ -28,43 +28,43 @@ function CategoryListAdmin({ categories }) {
 					</tr>
 				</thead>
 				<tbody className="divide-y divide-gray-200">
-					{categories.map((post) => (
+					{categories.map((category) => (
 						<tr
-							key={post._id}
+							key={category._id}
 							className="bg-gray-50 dark:bg-gray-700 border-b border-gray-700 dark:border-gray-100 hover:bg-gray-100 dark:hover:bg-gray-600 text-slate-900 dark:text-slate-200"
 						>
 							<td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-								{post.title}
+								{category.title}
 							</td>
-							<td className="px-6 py-4">{post.slug}</td>
+							<td className="px-6 py-4">{category.slug}</td>
 							<td className="px-6 py-4">
-								<img className="w-32" src={post.imageUrl}></img>
+								<img className="w-32" src={category.imageUrl}></img>
 							</td>
 							<td className="px-6 py-4">
 								<div
 									dangerouslySetInnerHTML={{
 										__html:
-											post.content.length > 200
-												? `${post.content.substring(
+											category.content.length > 200
+												? `${category.content.substring(
 														0,
 														50
 												  )}...`
-												: post.content,
+												: category.content,
 									}}
 								></div>
 							</td>
 							<td className="px-6 py-4">
-								{formatDate(post.createdAt)}
+								{formatDate(category.createdAt)}
 							</td>
 							<td className="px-6 py-4">
 								<div className=" flex text-right text-sm font-medium">
-									<Link href={`/admin/categories/${post._id}`}>
+									<Link href={`/admin/categories/${category.id}`}>
 										<p className="text-base text-indigo-400 hover:text-indigo-600 mr-3 hover:underline">
 											View
 										</p>
 									</Link>
 									<Link
-										href={`/admin/categories/edit/${post._id}`}
+										href={`/admin/categories/edit/${category.id}`}
 									>
 										<p className="text-base text-yellow-400 hover:text-yellow-600 mr-3 hover:underline">
 											Edit

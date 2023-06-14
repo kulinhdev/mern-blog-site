@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import NavBar from "@/components/NavbarClient";
+import NavbarClient from "@/components/layouts/ClientNavbar";
 import { formatDate } from "@/utils/common";
 
 const Post = () => {
@@ -26,7 +26,7 @@ const Post = () => {
 
 	return (
 		<>
-			<NavBar />
+			<NavbarClient />
 			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 				{post && (
 					<div className="bg-gray-200 rounded-lg shadow-lg px-6 py-8">

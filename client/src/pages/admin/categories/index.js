@@ -16,9 +16,11 @@ function CategoryPage() {
 		const response = await api.get(
 			`/api/admin/categories/search?page=${page}&limit=${limit}&title=${searchTerm}`
 		);
-		setCurrentPage(page);
-		setPages(Math.ceil(response.data.count / limit));
-		setCategories(response.data.categories);
+		if (response.status === 200) {
+			setCurrentPage(page);
+			setPages(Math.ceil(response.data.count / limit));
+			setCategories(response.data.categories);
+		}
 	};
 
 	useEffect(() => {

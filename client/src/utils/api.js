@@ -1,9 +1,8 @@
 import Cookies from "js-cookie";
 import axios from "axios";
-import { setAccessTokenAdmin, setRefreshTokenAdmin } from "../utils/common";
-import { useRouter } from "next/router";
+import { setAccessTokenAdmin } from "../utils/common";
 
-const baseURL = "http://localhost:5005";
+const baseURL = "https://mearn-blog-backend.onrender.com";
 
 const api = axios.create({
 	baseURL: baseURL,
