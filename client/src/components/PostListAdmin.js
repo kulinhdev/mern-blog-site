@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatDate } from "../utils/common";
+import { formatDate } from "@/utils/common";
 
 function PostListAdmin({ posts }) {
 	return (
@@ -93,9 +93,7 @@ function PostListAdmin({ posts }) {
 											View
 										</p>
 									</Link>
-									<Link
-										href={`/admin/posts/edit/${post.id}`}
-									>
+									<Link href={`/admin/posts/edit/${post.id}`}>
 										<p className="text-base text-yellow-400 hover:text-yellow-600 mr-3 hover:underline">
 											Edit
 										</p>

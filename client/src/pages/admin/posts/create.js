@@ -5,12 +5,9 @@ import api from "@/utils/api";
 import dynamic from "next/dynamic"; // Import the dynamic function from Next.js
 import Swal from "sweetalert2";
 
-const DynamicEditor = dynamic(
-	() => import("../../../components/DynamicEditor"),
-	{
-		ssr: false, // Ensure the component is not rendered on the server
-	}
-);
+const DynamicEditor = dynamic(() => import("@/components/DynamicEditor"), {
+	ssr: false, // Ensure the component is not rendered on the server
+});
 
 const KeyCodes = {
 	comma: 188,

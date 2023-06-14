@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import axios from "axios";
-import { setAccessTokenAdmin } from "../utils/common";
+import { setAccessTokenAdmin } from "@/utils/common";
 
 const baseURL = "https://mearn-blog-backend.onrender.com";
 

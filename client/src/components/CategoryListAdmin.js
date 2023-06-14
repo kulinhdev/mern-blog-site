@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatDate } from "../utils/common";
+import { formatDate } from "@/utils/common";
 
 function CategoryListAdmin({ categories }) {
 	return (
@@ -38,7 +38,10 @@ function CategoryListAdmin({ categories }) {
 							</td>
 							<td className="px-6 py-4">{category.slug}</td>
 							<td className="px-6 py-4">
-								<img className="w-32" src={category.imageUrl}></img>
+								<img
+									className="w-32"
+									src={category.imageUrl}
+								></img>
 							</td>
 							<td className="px-6 py-4">
 								<div
@@ -58,7 +61,9 @@ function CategoryListAdmin({ categories }) {
 							</td>
 							<td className="px-6 py-4">
 								<div className=" flex text-right text-sm font-medium">
-									<Link href={`/admin/categories/${category.id}`}>
+									<Link
+										href={`/admin/categories/${category.id}`}
+									>
 										<p className="text-base text-indigo-400 hover:text-indigo-600 mr-3 hover:underline">
 											View
 										</p>

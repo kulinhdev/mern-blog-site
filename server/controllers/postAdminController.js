@@ -3,7 +3,7 @@ const path = require("path");
 
 const Post = require("../models/Post");
 const Category = require("../models/Category");
-const { generateSlug } = require("../utils/common");
+const { generateSlug } = require("@/utils/common");
 
 async function getAllPosts(req, res) {
 	try {
