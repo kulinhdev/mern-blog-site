@@ -7,7 +7,6 @@ const storage = multer.diskStorage({
 		cb(null, "public/uploads"); // Specify the folder where uploaded files will be stored
 	},
 	filename: function (req, file, cb) {
-		console.log("multer check ==> ", req.body);
 		const originalName = file.originalname;
 		const extension = originalName.split(".").pop();
 		const fileName = `${slugify(req.body.title, {
