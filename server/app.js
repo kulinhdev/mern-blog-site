@@ -12,7 +12,7 @@ const { verifyToken } = require("./middleware/auth");
 const app = express();
 
 // Connect to database
-connectToDatabase();
+connectToDatabase(configs.mongoDbConnectionString);
 
 // Set middleware
 app.use(cors());
@@ -24,7 +24,6 @@ app.use(
 	"/public/uploads",
 	express.static(path.join(__dirname, "public/uploads"))
 );
-
 
 // Client routes
 app.get(["/", "/home"], (req, res) => {
@@ -41,10 +40,9 @@ app.use("/api/auth", adminAuthRoutes);
 
 // 404 Route
 app.get("/*", (req, res) => {
-	res.status(404).send("Request Not Found!");
+	res.status(404).send("Request Not Found...!");
 });
 
-const listen_port = configs.listenPort || 5000;
 const expose_port = configs.exposePort || 5005;
 
 // Listen port from docker server

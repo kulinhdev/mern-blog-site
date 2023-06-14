@@ -4,7 +4,7 @@ services:
   backend:
     build: ./server
     ports:
-      - '${BACKEND_PORT:-5005}:5000'
+      - '${BE_EXPOSE_PORT:-5005}:5000'
     environment:
       - NODE_ENV=$NODE_ENV
     depends_on:
@@ -18,7 +18,7 @@ services:
   frontend:
     build: ./client
     ports:
-      - '${FRONTEND_PORT:-3003}:3000'
+      - '${FE_EXPOSE_PORT:-3003}:3000'
     depends_on:
       - backend
     restart: always

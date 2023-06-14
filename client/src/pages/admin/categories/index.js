@@ -99,7 +99,7 @@ function CategoryPage() {
 					<Pagination
 						currentPage={currentPage}
 						pages={pages}
-						switchPage={fetchCategories}
+						switchPage={fetchCategoriesByCondition}
 					/>
 				</div>
 			</div>
