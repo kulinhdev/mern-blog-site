@@ -1,4 +1,4 @@
-import ClientNavbar from "@/components/layouts/ClientNavbar";
+import ClientNavbar from "./ClientNavbar";
 import React from "react";
 
 const ClientLayout = ({ children }) => {
