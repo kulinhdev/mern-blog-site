@@ -8,7 +8,6 @@ const AdminLayout = ({ children }) => {
 
 	useEffect(() => {
 		const refreshToken = Cookies.get("refresh_token");
-		const accessToken = Cookies.get("access_token");
 		const adminLogin = localStorage.getItem("admin");
 
 		// console.log("adminCheck ==> ", {

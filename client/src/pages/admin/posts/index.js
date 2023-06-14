@@ -5,7 +5,7 @@ import Link from "next/link";
 import PostListAdmin from "@/components/PostListAdmin";
 import Pagination from "@/components/Pagination";
 
-function PostPage() {
+function PostsPage() {
 	const [posts, setPosts] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [pages, setPages] = useState(1);
@@ -109,4 +109,4 @@ function PostPage() {
 	);
 }
 
-export default PostPage;
+export default PostsPage;

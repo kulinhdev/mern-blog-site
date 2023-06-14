@@ -19,6 +19,7 @@
 	},
 	"scripts": {
 		"start": "node app.js",
-		"dev": "nodemon -L app.js"
+		"dev": "nodemon -L app.js",
+		"clear": "nodemon --clear"
 	}
 }

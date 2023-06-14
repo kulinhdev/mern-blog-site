@@ -11,7 +11,6 @@ function PostPage() {
 
 	useEffect(() => {
 		const { id } = router.query;
-		console.log("query", router.query);
 		const fetchData = async () => {
 			const response = await api.get(`/api/admin/posts/${id}`);
 
@@ -22,7 +21,7 @@ function PostPage() {
 			}
 		};
 
-		if (id !== "undefined") fetchData();
+		if (id) fetchData();
 	}, [router.query]);
 
 	const handleDelete = () => {
@@ -136,7 +135,7 @@ function PostPage() {
 						<div className="flex justify-end mt-8">
 							<button
 								onClick={() =>
-									router.push(`/admin/posts/edit/${post._id}`)
+									router.push(`/admin/posts/edit/${post.id}`)
 								}
 								className="bg-blue-500 hover:bg-blue-700 rounded-lg text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline"
 							>
