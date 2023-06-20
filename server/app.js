@@ -19,12 +19,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the "public" folder: app.use(express.static('public'));
-// app.use(
-// 	"/public/uploads",
-// 	express.static(path.join(__dirname, "public/uploads"))
-// );
-app.use(express.static(path.join(__dirname, "public", "uploads")));
+// Serve static files from the "public"
+app.use(
+	"/public/uploads",
+	express.static(path.join(__dirname, "public/uploads"))
+);
 
 // Client routes
 app.get(["/", "/home"], (req, res) => {
