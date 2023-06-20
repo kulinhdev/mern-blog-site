@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 // 	"/public/uploads",
 // 	express.static(path.join(__dirname, "public/uploads"))
 // );
-app.use(express.static("/public/uploads"));
+app.use(express.static(path.join(__dirname, "public", "uploads")));
 
 // Client routes
 app.get(["/", "/home"], (req, res) => {
