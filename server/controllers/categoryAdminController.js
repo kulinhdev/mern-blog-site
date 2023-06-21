@@ -49,7 +49,7 @@ async function getCategoriesByCondition(req, res) {
 
 		// Map the posts and add the image URLs
 		const categoriesWithImages = categories.map((category) => ({
-			_id: category._id,
+			id: category._id,
 			title: category.title,
 			content: category.content,
 			slug: category.slug,
@@ -79,7 +79,7 @@ async function getCategoryById(req, res) {
 
 		// Map the posts and add the image URLs
 		const categoryWithImage = {
-			_id: category._id,
+			id: category._id,
 			title: category.title,
 			content: category.content,
 			slug: category.slug,

@@ -1,8 +1,8 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import NavbarClient from "@/components/layouts/ClientNavbar";
 import { formatDate } from "@/utils/common";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
+import ClientLayout from "@/components/layouts/ClientLayout";
 
 const Post = () => {
 	const router = useRouter();
@@ -25,8 +25,7 @@ const Post = () => {
 	}
 
 	return (
-		<>
-			<NavbarClient />
+		<ClientLayout>
 			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 				{post && (
 					<div className="bg-gray-200 rounded-lg shadow-lg px-6 py-8">
@@ -68,7 +67,7 @@ const Post = () => {
 					</div>
 				)}
 			</div>
-		</>
+		</ClientLayout>
 	);
 };
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "@/utils/api";
+import ClientLayout from "@/components/layouts/ClientLayout";
 import PostList from "@/components/PostListClient";
-import NavbarClient from "@/components/layouts/ClientNavbar";
 
 const Index = () => {
 	const [posts, setPosts] = useState([]);
@@ -39,8 +39,7 @@ const Index = () => {
 	};
 
 	return (
-		<>
-			<NavbarClient />
+		<ClientLayout>
 			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 				<form onSubmit={handleSearch} className="mb-8">
 					<label htmlFor="search" className="sr-only">
@@ -78,7 +77,7 @@ const Index = () => {
 					</button>
 				</div>
 			</div>
-		</>
+		</ClientLayout>
 	);
 };
 

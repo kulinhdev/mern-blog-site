@@ -1,10 +1,10 @@
-import ClientNavbar from "./ClientNavbar";
+import ClientNav from "./ClientNav";
 import React from "react";
 
 const ClientLayout = ({ children }) => {
 	return (
 		<div className="client-page">
-			<ClientNavbar />
+			<ClientNav />
 			<div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 				{children}
 			</div>
