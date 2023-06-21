@@ -10,7 +10,7 @@ function PostsPage() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [pages, setPages] = useState(1);
 	const [searchTerm, setSearchTerm] = useState("");
-	const [limit, setLimit] = useState(5);
+	const [limit, setLimit] = useState(0);
 
 	const fetchPostsByCondition = async (page = 1) => {
 		const response = await api.get(
@@ -37,7 +37,8 @@ function PostsPage() {
 	}, []);
 
 	useEffect(() => {
-		fetchPostsByCondition();
+		console.log({ limit, searchTerm });
+		if (limit > 0 || searchTerm != "") fetchPostsByCondition();
 	}, [limit, searchTerm]);
 
 	const handleLimitChange = (event) => {
@@ -85,6 +86,7 @@ function PostsPage() {
 							onChange={handleLimitChange}
 							className="w-44 border-gray-400 border-2 py-2 px-4 rounded-lg ml-7 text-slate-700 dark:text-slate-100 bg-slate-100 dark:bg-slate-600"
 						>
+							<option value="0">= Limit =</option>
 							<option value="5">5</option>
 							<option value="10">10</option>
 							<option value="20">20</option>

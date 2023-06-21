@@ -1,9 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 
-const Post = require("../models/Post");
-const Category = require("../models/Category");
-const { generateSlug } = require("../utils/common");
+const Post = require("../../models/Post");
+const Category = require("../../models/Category");
+const { generateSlug } = require("../../utils/common");
 
 async function getAllPosts(req, res) {
 	try {
@@ -53,7 +53,7 @@ async function getPostsByCondition(req, res) {
 	const skip = (page - 1) * limit;
 	const searchTerm = req.query.title || "";
 
-	console.log("Pagination ==> ", { page, limit, skip, searchTerm });
+	console.log("Pagination By: ", { page, limit, skip, searchTerm });
 
 	try {
 		const count = await Post.countDocuments({

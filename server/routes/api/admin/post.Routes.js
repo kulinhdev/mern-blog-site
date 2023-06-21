@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const postController = require("../controllers/postAdminController");
-const upload = require("../config/uploadFile");
+const postController = require("../../../controllers/admin/postsController");
+const upload = require("../../../config/uploadFile");
 
 router.get("/", postController.getAllPosts);
 

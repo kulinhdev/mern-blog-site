@@ -1,16 +1,11 @@
-const express = require("express");
 const bcrypt = require("bcryptjs");
+const express = require("express");
 const jwt = require("jsonwebtoken");
-const configs = require("../config/keys");
-const User = require("../models/User");
+
+const configs = require("../../../config/keys");
+const User = require("../../../models/User");
 
 const router = express.Router();
-
-// Define configuration
-configs.JWTAccessTokenExpiresIn = "1h";
-configs.JWTRefreshTokenExpiresIn = "100y";
-configs.JWTSecret =
-	"JLJ1x8O2HwmcaYS3i8NxyixSFCaZqDH7gcWeko1ZCtOdaR52DqFfqBCcZAsKVMrwtgSLvFcx1PNL";
 
 function generateAccessToken(user) {
 	const accessToken = jwt.sign(
@@ -156,7 +151,7 @@ router.post("/refresh-token", (req, res) => {
 			.json({ message: "refresh_token must be fill ...!" });
 
 	jwt.verify(refreshToken, configs.JWTSecret, (error, user) => {
-		console.log("jwt.verify in /refresh-token ==> ", error, user);
+		console.log("client jwt.verify in /refresh-token ==> ", error, user);
 		if (error) return res.status(403).json({ message: error.message });
 		const accessToken = generateAccessToken(user);
 		res.status(200).json({ access_token: accessToken });

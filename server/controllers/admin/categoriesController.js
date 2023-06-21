@@ -1,5 +1,5 @@
-const Category = require("../models/Category");
-const { generateSlug } = require("../utils/common");
+const Category = require("../../models/Category");
+const { generateSlug } = require("../../utils/common");
 const fs = require("fs");
 const path = require("path");
 

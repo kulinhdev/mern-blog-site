@@ -5,7 +5,8 @@ configs = {
 	listenPort: process.env.BE_LISTEN_PORT,
 	exposePort: process.env.BE_EXPOSE_PORT,
 	JWTSecret: process.env.JWT_SECRET,
-	JWTExpiresIn: process.env.JWT_EXPIRES_IN,
+	JWTAccessTokenExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
+	JWTRefreshTokenExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
 	mongoDbConnectionString:
 		process.env.NODE_ENV == "local"
 			? process.env.MONGO_URI_DEV

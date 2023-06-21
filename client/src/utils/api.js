@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { setAccessTokenAdmin } from "@/utils/common";
 
-const baseURL = "https://mearn-blog-backend.onrender.com";
+const baseURL = "http://localhost:5005"; // "https://mearn-blog-backend.onrender.com";
 
 const api = axios.create({
 	baseURL: baseURL,

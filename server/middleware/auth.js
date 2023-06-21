@@ -2,8 +2,7 @@ const jwt = require("jsonwebtoken");
 const configs = require("../config/keys");
 
 const verifyToken = (req, res, next) => {
-	configs.JWTSecret =
-		"JLJ1x8O2HwmcaYS3i8NxyixSFCaZqDH7gcWeko1ZCtOdaR52DqFfqBCcZAsKVMrwtgSLvFcx1PNL";
+	console.log({ requestURl: req.originalUrl });
 
 	const requestToken =
 		req.headers["x-access-token"] || req.headers.authorization;

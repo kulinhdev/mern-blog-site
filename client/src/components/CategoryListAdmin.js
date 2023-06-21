@@ -30,7 +30,7 @@ function CategoryListAdmin({ categories }) {
 				<tbody className="divide-y divide-gray-200">
 					{categories.map((category) => (
 						<tr
-							key={category._id}
+							key={category.id}
 							className="bg-gray-50 dark:bg-gray-700 border-b border-gray-700 dark:border-gray-100 hover:bg-gray-100 dark:hover:bg-gray-600 text-slate-900 dark:text-slate-200"
 						>
 							<td className="px-6 py-4 font-medium text-gray-900 dark:text-white">

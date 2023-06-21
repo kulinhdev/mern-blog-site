@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const categoryController = require("../controllers/categoryAdminController");
-const upload = require("../config/uploadFile");
+const categoryController = require("../../../controllers/admin/categoriesController");
+const upload = require("../../../config/uploadFile");
 
 // Get all categories
 router.get("/", categoryController.getAllCategories);
