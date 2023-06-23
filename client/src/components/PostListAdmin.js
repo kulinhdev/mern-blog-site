@@ -20,6 +20,9 @@ function PostListAdmin({ posts }) {
 							Description
 						</th>
 						<th scope="col" className="px-6 py-3">
+							Reading Times
+						</th>
+						<th scope="col" className="px-6 py-3">
 							Categories
 						</th>
 						<th scope="col" className="px-6 py-3">
@@ -58,6 +61,11 @@ function PostListAdmin({ posts }) {
 												: post.content,
 									}}
 								></div>
+							</td>
+							<td className="px-6 py-4">
+								<span className="text-teal-300 font-medium">
+									{post.readingMinutes}
+								</span>
 							</td>
 							<td className="px-6 py-4">
 								<div className="flex flex-col">

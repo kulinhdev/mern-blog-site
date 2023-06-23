@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
-import api from "@/utils/api";
+import api from "@/utils/backendApi";
 import { setAccessTokenAdmin, setRefreshTokenAdmin } from "@/utils/common";
 
 function RegisterPage() {

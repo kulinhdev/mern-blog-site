@@ -1,7 +1,7 @@
-import AdminLayout from "@/components/layouts/AdminLayout";
 import { useState, useRef, useEffect } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
-import api from "@/utils/api";
+import AdminLayout from "@/components/layouts/AdminLayout";
+import api from "@/utils/backendApi";
 import dynamic from "next/dynamic"; // Import the dynamic function from Next.js
 import Swal from "sweetalert2";
 
@@ -25,6 +25,7 @@ function CreatePostPage() {
 	const [suggestionTags, setSuggestionTags] = useState();
 	const [selectedCategories, setSelectedCategories] = useState();
 	const [suggestionCates, setSuggestionCates] = useState();
+	const [readingMinutes, setReadingMinutes] = useState(0);
 
 	useEffect(() => {
 		setSuggestionTags([
@@ -88,6 +89,10 @@ function CreatePostPage() {
 		setSelectedCategories(selectedOptions);
 	};
 
+	const handleReadingMinutesChange = (event) => {
+		if (event.target.value > 0) setReadingMinutes(event.target.value);
+	};
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const adminLogin = localStorage.getItem("admin");
@@ -102,6 +107,7 @@ function CreatePostPage() {
 			const formData = new FormData();
 			formData.append("title", title);
 			formData.append("content", content);
+			formData.append("readingMinutes", readingMinutes);
 			formData.append("tags", tagsString);
 			formData.append("categories", categoriesString);
 			formData.append("author", authorId);
@@ -127,8 +133,10 @@ function CreatePostPage() {
 			});
 
 			// Reset input
+			setTags([]);
 			setTitle("");
 			setContent("");
+			setReadingMinutes(0);
 			setSelectedImage(null);
 			if (fileInputRef.current) {
 				fileInputRef.current.value = null;
@@ -208,6 +216,23 @@ function CreatePostPage() {
 								</div>
 							)}
 						</div>
+					</div>
+					<div className="mb-7">
+						<label
+							htmlFor="readingMinutes"
+							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
+						>
+							Reading Minutes
+						</label>
+						<input
+							type="number"
+							name="readingMinutes"
+							id="readingMinutes"
+							value={readingMinutes}
+							onChange={handleReadingMinutesChange}
+							required
+							className="appearance-none border rounded w-full py-2 px-3 text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 shadow-sm focus:outline-none focus:shadow-outline"
+						/>
 					</div>
 					<div className="mb-7">
 						<label

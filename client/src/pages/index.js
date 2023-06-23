@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "@/utils/api";
+import api from "@/utils/backendApi";
 import PostList from "@/components/PostListClient";
 import ClientLayout from "@/components/layouts/ClientLayout";
 

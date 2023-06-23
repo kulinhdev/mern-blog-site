@@ -21,6 +21,7 @@ async function getAllPosts(req, res) {
 					id: post._id,
 					title: post.title,
 					content: post.content,
+					readingMinutes: post.readingMinutes,
 					slug: post.slug,
 					tags: post.tags,
 					createdAt: post.createdAt,
@@ -77,6 +78,7 @@ async function getPostsByCondition(req, res) {
 					id: post._id,
 					title: post.title,
 					content: post.content,
+					readingMinutes: post.readingMinutes,
 					slug: post.slug,
 					tags: post.tags,
 					createdAt: post.createdAt,
@@ -121,6 +123,7 @@ async function getPostById(req, res) {
 			id: post._id,
 			title: post.title,
 			content: post.content,
+			readingMinutes: post.readingMinutes,
 			slug: post.slug,
 			tags: post.tags,
 			categories,
@@ -140,13 +143,15 @@ async function getPostById(req, res) {
 }
 
 async function createPost(req, res) {
-	const { title, content, author, tags, categories } = req.body;
+	const { title, content, readingMinutes, author, tags, categories } =
+		req.body;
 	const imagePath = req.file ? req.file.path : null;
 
 	try {
 		const post = new Post({
 			title,
 			content,
+			readingMinutes,
 			author,
 			categories: JSON.parse(categories),
 			tags: JSON.parse(tags),
@@ -173,7 +178,7 @@ async function updatePost(req, res) {
 				.json({ message: "Post not found with id: " + postId });
 		}
 
-		const { title, content, tags, categories } = req.body;
+		const { title, content, readingMinutes, tags, categories } = req.body;
 
 		const imagePath = req.file ? req.file.path : post.image;
 
@@ -187,7 +192,8 @@ async function updatePost(req, res) {
 		post.image = imagePath;
 		post.tags = JSON.parse(tags);
 		post.categories = JSON.parse(categories);
-		post.content = content || post.content;
+		post.content = content;
+		post.readingMinutes = readingMinutes;
 
 		await post.save();
 

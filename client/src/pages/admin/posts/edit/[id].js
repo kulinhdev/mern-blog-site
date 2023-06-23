@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { WithContext as ReactTags } from "react-tag-input";
 import AdminLayout from "@/components/layouts/AdminLayout";
-import api from "@/utils/api";
+import api from "@/utils/backendApi";
 import dynamic from "next/dynamic"; // Import the dynamic function from Next.js
 import Swal from "sweetalert2";
 
@@ -28,6 +28,7 @@ function EditPostPage() {
 	const [suggestionTags, setSuggestionTags] = useState();
 	const [selectedCategories, setSelectedCategories] = useState();
 	const [suggestionCates, setSuggestionCates] = useState();
+	const [readingMinutes, setReadingMinutes] = useState(0);
 
 	useEffect(() => {
 		const { id } = router.query;
@@ -47,6 +48,7 @@ function EditPostPage() {
 			if (response.status === 200 && post) {
 				setTitle(post.title);
 				setContent(post.content);
+				setReadingMinutes(post.readingMinutes);
 				setSelectedImage(post.imageUrl);
 				setTags(post.tags);
 			}
@@ -128,6 +130,7 @@ function EditPostPage() {
 			const formData = new FormData();
 			formData.append("title", title);
 			formData.append("content", content);
+			formData.append("readingMinutes", readingMinutes);
 			formData.append("tags", tagsString);
 			formData.append("categories", categoriesString);
 			formData.append("author", authorId);
@@ -161,6 +164,10 @@ function EditPostPage() {
 				confirmButtonText: "OK",
 			});
 		}
+	};
+
+	const handleReadingMinutesChange = (event) => {
+		if (event.target.value > 0) setReadingMinutes(event.target.value);
 	};
 
 	return (
@@ -226,6 +233,23 @@ function EditPostPage() {
 								</div>
 							)}
 						</div>
+					</div>
+					<div className="mb-7">
+						<label
+							htmlFor="readingMinutes"
+							className="block text-slate-900 dark:text-slate-200 font-bold mb-2"
+						>
+							Reading Minutes
+						</label>
+						<input
+							type="number"
+							name="readingMinutes"
+							id="readingMinutes"
+							value={readingMinutes}
+							onChange={handleReadingMinutesChange}
+							required
+							className="appearance-none border rounded w-full py-2 px-3 text-slate-900 dark:text-slate-200 bg-slate-50 dark:bg-slate-700 shadow-sm focus:outline-none focus:shadow-outline"
+						/>
 					</div>
 					<div className="mb-7">
 						<label

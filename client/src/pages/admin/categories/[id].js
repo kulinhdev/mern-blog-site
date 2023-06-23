@@ -2,7 +2,7 @@ import AdminLayout from "@/components/layouts/AdminLayout";
 import { formatDate } from "@/utils/common";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import api from "@/utils/api";
+import api from "@/utils/backendApi";
 import Swal from "sweetalert2";
 
 function CategoryPage() {

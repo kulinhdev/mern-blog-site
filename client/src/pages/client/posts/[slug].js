@@ -1,7 +1,7 @@
 import { formatDate } from "@/utils/common";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
+import api from "@/utils/frontendApi";
 import {
 	BookmarkIcon as BookmarkIconOutline,
 	HeartIcon as HeartIconOutline,
@@ -20,7 +20,7 @@ const Post = () => {
 		const { slug } = router.query;
 		console.log("router.query", router.query);
 		const fetchPost = async () => {
-			const { data } = await axios.get(
+			const { data } = await api.get(
 				`http://localhost:5005/api/posts/${router.query.slug}`
 			);
 			setPost(data);
@@ -29,25 +29,24 @@ const Post = () => {
 	}, [router.query]);
 
 	const toggleSaveStatus = async () => {
-		const { data } = await axios.post(
-			`http://localhost:5005/api/posts/${post.id}/save`,
-			{ isSaved: !isSaved }
+		const response = await api.post(
+			`http://localhost:5005/api/posts/save`,
+			{ isSaved: !isSaved, userId, postId: post.id }
 		);
+		console.log(response);
 		setIsSaved(data.isSaved);
 	};
 
 	const incrementLikeCount = async () => {
-		const { data } = await axios.post(
-			`http://localhost:5005/api/posts/${post.id}/like`
-		);
+		const { data } = await api.post(`http://localhost:5005/api/posts/like`);
 		setLikeCount(data.likeCount);
 	};
 
 	const handleSubmitComment = async (e) => {
 		e.preventDefault();
 		const content = e.target.elements.comment.value;
-		const { data } = await axios.post(
-			`http://localhost:5005/api/posts/${post.id}/comments`,
+		const { data } = await api.post(
+			`http://localhost:5005/api/posts/comments`,
 			{ content }
 		);
 		setComments([...comments, data]);
@@ -88,14 +87,17 @@ const Post = () => {
 						</div>
 						<div className="my-8">
 							<span className="text-lg font-bold mr-3">
-								{formatDate(post.createdAt)}
+								{formatDate(
+									post.createdAt,
+									post.readingMinutes
+								)}
 							</span>
 						</div>
 						{post.imageUrl && (
 							<img
 								src={post.imageUrl}
 								alt={post.title}
-								className="mb-6 rounded-lg"
+								className="mb-6 w-64 rounded-lg"
 							/>
 						)}
 						<div

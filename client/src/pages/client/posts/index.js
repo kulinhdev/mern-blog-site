@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "@/utils/api";
+import api from "@/utils/backendApi";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import PostList from "@/components/PostListClient";
 
@@ -20,7 +20,7 @@ const Index = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await api.get("/api/posts");
+			const response = await api.get("/api/admin/posts");
 
 			console.log(response);
 

@@ -14,6 +14,10 @@ const PostSchema = new mongoose.Schema(
 			required: true,
 			unique: true,
 		},
+		readingMinutes: {
+			type: Number,
+			required: true,
+		},
 		image: {
 			type: String,
 			required: true,

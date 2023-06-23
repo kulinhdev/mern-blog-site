@@ -22,6 +22,7 @@ async function getAllPosts(req, res) {
 			_id: post._id,
 			title: post.title,
 			content: post.content,
+			readingMinutes: post.readingMinutes,
 			slug: post.slug,
 			tags: post.tags,
 			createdAt: post.createdAt,
@@ -46,6 +47,7 @@ async function getPostBySlug(req, res) {
 			_id: post._id,
 			title: post.title,
 			content: post.content,
+			readingMinutes: post.readingMinutes,
 			slug: post.slug,
 			tags: post.tags,
 			createdAt: post.createdAt,
@@ -58,7 +60,94 @@ async function getPostBySlug(req, res) {
 	}
 }
 
+async function addLike(req, res) {
+	try {
+		const { postId, userId } = req.body;
+
+		// Check if the user has already liked the post
+		const post = await Post.findById(postId);
+		if (!post) {
+			return res.status(404).json({ message: "Post not found" });
+		}
+
+		const isLiked = post.likes.find(
+			(like) => like.toString() === userId.toString()
+		);
+		if (isLiked) {
+			return res
+				.status(400)
+				.json({ message: "You have already liked this post" });
+		}
+
+		// Add the like to the post
+		post.likes.push(userId);
+		await post.save();
+
+		res.json({ message: "Post liked successfully" });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+}
+
+async function addComment(req, res) {
+	try {
+		const { postId, userId, text } = req.body;
+
+		// Check if the post exists
+		const post = await Post.findById(postId);
+		if (!post) {
+			return res.status(404).json({ message: "Post not found" });
+		}
+
+		// Create a new comment object
+		const newComment = {
+			user: userId,
+			text,
+			createdAt: Date.now(),
+		};
+
+		// Add the comment to the post
+		post.comments.push(newComment);
+		await post.save();
+
+		res.json({ message: "Comment added successfully" });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+}
+
+async function savePost(req, res) {
+	try {
+		const { postId, userId, isSaved } = req.body;
+
+		// Find the user by ID
+		const user = await User.findById(userId);
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
+
+		// Toggle the isSaved property of the post in the user's savedPosts array
+		const index = user.savedPosts.indexOf(postId);
+		if (isSaved && index === -1) {
+			user.savedPosts.push(postId);
+		} else if (!isSaved && index !== -1) {
+			user.savedPosts.splice(index, 1);
+		}
+		await user.save();
+
+		res.json({
+			isSaved,
+			message: "Post saved status updated successfully",
+		});
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+}
+
 module.exports = {
 	getAllPosts,
 	getPostBySlug,
+	addLike,
+	addComment,
+	savePost,
 };

@@ -1,6 +1,6 @@
 import AdminLayout from "@/components/layouts/AdminLayout";
 import { useState, useEffect } from "react";
-import api from "@/utils/api";
+import api from "@/utils/backendApi";
 import Link from "next/link";
 import PostListAdmin from "@/components/PostListAdmin";
 import Pagination from "@/components/Pagination";
