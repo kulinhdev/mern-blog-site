@@ -4,7 +4,7 @@ import { setAccessTokenAdmin } from "@/utils/common";
 
 const baseURL = "http://localhost:5005"; // "https://mearn-blog-backend.onrender.com";
 
-const api = axios.create({
+const frontendApi = axios.create({
 	baseURL: baseURL,
 });
 
@@ -34,7 +34,7 @@ async function updateAccessToken() {
 	}
 }
 
-api.interceptors.request.use(
+frontendApi.interceptors.request.use(
 	async (config) => {
 		let accessToken = Cookies.get("access_token");
 
@@ -52,7 +52,7 @@ api.interceptors.request.use(
 	(error) => Promise.reject(error)
 );
 
-api.interceptors.response.use(
+frontendApi.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		const originalRequest = error.config;
@@ -80,4 +80,4 @@ api.interceptors.response.use(
 	}
 );
 
-export default api;
+export default frontendApi;
