@@ -1,5 +1,18 @@
 import Cookies from "js-cookie";
 
+export function setAccessTokenUser(accessToken) {
+	// Set asset token in cookie with 1 hour expiry
+	Cookies.set("access_token", accessToken, {
+		expires: 1 / 24,
+		path: "/",
+	});
+}
+
+export function setRefreshTokenUser(refreshToken) {
+	// Set refresh token in cookie with 30 day expiry
+	Cookies.set("refresh_token", refreshToken, { expires: 30, path: "/" });
+}
+
 export function setAccessTokenAdmin(accessToken) {
 	// Set asset token in cookie with 1 hour expiry
 	Cookies.set("access_token", accessToken, {
@@ -29,4 +42,21 @@ export function formatDate(dateString, readingMins = null) {
 	return `${formattedDate} ${
 		readingMins ? " — " + readingMins + " min read" : ""
 	} `;
+}
+
+export function formatDateTime(dateTimeString) {
+	const date = new Date(dateTimeString);
+
+	const options = {
+		weekday: "long",
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+		hour: "numeric",
+		minute: "numeric",
+		second: "numeric",
+		timeZoneName: "short",
+	};
+
+	return date.toLocaleDateString("en-US", options);
 }

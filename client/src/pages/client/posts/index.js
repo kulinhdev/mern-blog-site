@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "@/utils/backendApi";
-import ClientLayout from "@/components/layouts/ClientLayout";
+import ClientLayout from "@/layouts/ClientLayout";
 import PostList from "@/components/PostListClient";
 
 const Index = () => {

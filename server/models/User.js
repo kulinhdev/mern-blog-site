@@ -31,7 +31,9 @@ const UserSchema = new mongoose.Schema(
 		isVerified: {
 			type: Boolean,
 			default: false,
-		},
+		}, 
+		savedPosts: [{ type: mongoose.ObjectId, ref: "Post" }],
+		likedPosts: [{ type: mongoose.ObjectId, ref: "Post" }],
 	},
 	{ timestamps: true }
 );

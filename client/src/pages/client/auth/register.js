@@ -35,7 +35,7 @@ function RegisterPage() {
 				showConfirmButton: false,
 				timer: 1500,
 			});
-			router.push("/admin/auth/login");
+			router.push("/client/auth/login");
 		} else {
 			// Get error message
 			const responseMessage =
@@ -52,8 +52,30 @@ function RegisterPage() {
 		}
 	};
 
+	const validateFields = () => {
+		let valid = true;
+
+		Object.values(formData).forEach((value) => {
+			if (!value) {
+				valid = false;
+			}
+		});
+
+		return valid;
+	};
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+
+		if (formData.password !== formData.confirmPassword) {
+			setError("Passwords do not match");
+			return;
+		}
+
+		if (!validateFields()) {
+			setError("Please fill out all fields");
+			return;
+		}
 
 		try {
 			await handleRegister(formData);
@@ -116,7 +138,7 @@ function RegisterPage() {
 							>
 								UserName
 							</label>
-							<div className="mt-1">
+							<div className="mt-1 mb-4">
 								<input
 									type="text"
 									id="userName"
@@ -124,9 +146,13 @@ function RegisterPage() {
 									value={formData.userName}
 									onChange={handleChange}
 									placeholder="UserName"
-									required
-									className="border-gray-400 border-2 py-2 px-4 rounded w-full mb-4 text-stone-800"
+									className="border-gray-400 border-2 py-2 px-4 rounded w-full  text-stone-800"
 								/>
+								{error && !formData.userName && (
+									<span className="my-2 ml-1 text-sm text-red-600">
+										Filed username is required!
+									</span>
+								)}
 							</div>
 						</div>
 						<div className="grid grid-cols-2 gap-2">
@@ -137,7 +163,7 @@ function RegisterPage() {
 								>
 									FirstName
 								</label>
-								<div className="mt-1">
+								<div className="mt-1 mb-4">
 									<input
 										type="text"
 										id="firstName"
@@ -145,9 +171,13 @@ function RegisterPage() {
 										value={formData.firstName}
 										onChange={handleChange}
 										placeholder="FirstName"
-										required
-										className="border-gray-400 border-2 py-2 px-4 rounded w-full mb-4 text-stone-800"
+										className="border-gray-400 border-2 py-2 px-4 rounded w-full text-stone-800"
 									/>
+									{error && !formData.firstName && (
+										<span className="my-2 ml-1 text-sm text-red-600">
+											Filed firstName is required!
+										</span>
+									)}
 								</div>
 							</div>
 							<div>
@@ -157,7 +187,7 @@ function RegisterPage() {
 								>
 									LastName
 								</label>
-								<div className="mt-1">
+								<div className="mt-1 mb-4">
 									<input
 										type="text"
 										id="lastName"
@@ -165,9 +195,13 @@ function RegisterPage() {
 										value={formData.lastName}
 										onChange={handleChange}
 										placeholder="LastName"
-										required
-										className="border-gray-400 border-2 py-2 px-4 rounded w-full mb-4 text-stone-800"
+										className="border-gray-400 border-2 py-2 px-4 rounded w-full text-stone-800"
 									/>
+									{error && !formData.lastName && (
+										<span className="my-2 ml-1 text-sm text-red-600">
+											Filed lastName is required!
+										</span>
+									)}
 								</div>
 							</div>
 						</div>
@@ -178,7 +212,7 @@ function RegisterPage() {
 							>
 								Email
 							</label>
-							<div className="mt-1">
+							<div className="mt-1 mb-4">
 								<input
 									type="email"
 									id="email"
@@ -186,9 +220,13 @@ function RegisterPage() {
 									value={formData.email}
 									onChange={handleChange}
 									placeholder="Email"
-									required
-									className="border-gray-400 border-2 py-2 px-4 rounded w-full mb-4 text-stone-800"
+									className="border-gray-400 border-2 py-2 px-4 rounded w-full text-stone-800"
 								/>
+								{error && !formData.email && (
+									<span className="my-2 ml-1 text-sm text-red-600">
+										Filed email is required!
+									</span>
+								)}
 							</div>
 						</div>
 						<div>
@@ -198,18 +236,22 @@ function RegisterPage() {
 							>
 								Password
 							</label>
-							<div className="mt-1">
+							<div className="mt-1 mb-4">
 								<input
 									id="password"
 									name="password"
 									type="password"
 									autoComplete="current-password"
 									placeholder="Password"
-									required
 									className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-stone-800 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 									value={formData.password}
 									onChange={handleChange}
 								/>
+								{error && !formData.password && (
+									<span className="my-2 ml-1 text-sm text-red-600">
+										Filed password is required!
+									</span>
+								)}
 							</div>
 						</div>
 						<div>
@@ -226,11 +268,15 @@ function RegisterPage() {
 									type="password"
 									autoComplete="current-password"
 									placeholder="Confirm Password"
-									required
 									className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-stone-800 placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 									value={formData.confirmPassword}
 									onChange={handleChange}
 								/>
+								{error && !formData.confirmPassword && (
+									<span className="my-2 ml-1 text-sm text-red-600">
+										Filed confirm password is required!
+									</span>
+								)}
 							</div>
 						</div>
 

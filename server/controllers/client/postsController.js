@@ -1,4 +1,6 @@
+const Comment = require("../../models/Comment");
 const Post = require("../../models/Post");
+const User = require("../../models/User");
 
 async function getAllPosts(req, res) {
 	const page = req.query.page || 1;
@@ -19,7 +21,7 @@ async function getAllPosts(req, res) {
 
 		// Map the posts and add the image URLs
 		const postsWithImages = posts.map((post) => ({
-			_id: post._id,
+			id: post._id,
 			title: post.title,
 			content: post.content,
 			readingMinutes: post.readingMinutes,
@@ -37,81 +39,169 @@ async function getAllPosts(req, res) {
 
 async function getPostBySlug(req, res) {
 	try {
-		const post = await Post.findOne({ slug: req.params.slug });
+		const post = await Post.findOne({ slug: req.params.slug }).populate({
+			path: "comments",
+			populate: {
+				path: "user",
+				model: "User",
+				select: "firstName lastName userName email avatar",
+			},
+		});
+
+		console.log({ post });
 		if (!post) {
 			return res.status(404).json({ message: "Post not found" });
 		}
 
 		// Map the posts and add the image URLs
 		const postWithImage = {
-			_id: post._id,
+			id: post._id,
 			title: post.title,
 			content: post.content,
 			readingMinutes: post.readingMinutes,
 			slug: post.slug,
 			tags: post.tags,
+			comments: post.comments,
 			createdAt: post.createdAt,
 			imageUrl: `${req.protocol}://${req.get("host")}/${post.image}`,
 		};
 
 		res.json(postWithImage);
 	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
-}
-
-async function addLike(req, res) {
-	try {
-		const { postId, userId } = req.body;
-
-		// Check if the user has already liked the post
-		const post = await Post.findById(postId);
-		if (!post) {
-			return res.status(404).json({ message: "Post not found" });
-		}
-
-		const isLiked = post.likes.find(
-			(like) => like.toString() === userId.toString()
-		);
-		if (isLiked) {
-			return res
-				.status(400)
-				.json({ message: "You have already liked this post" });
-		}
-
-		// Add the like to the post
-		post.likes.push(userId);
-		await post.save();
-
-		res.json({ message: "Post liked successfully" });
-	} catch (error) {
+		console.log({ error: error.message });
 		res.status(500).json({ error: error.message });
 	}
 }
 
 async function addComment(req, res) {
 	try {
-		const { postId, userId, text } = req.body;
+		const { user, post, content } = req.body;
 
-		// Check if the post exists
-		const post = await Post.findById(postId);
-		if (!post) {
+		// Find the user by ID
+		const userObj = await User.findById(user);
+		//  Find the post by ID
+		const existingPost = await Post.findById(post);
+
+		// Check user exists
+		if (!userObj)
+			return res.status(404).json({ message: "User not found" });
+		// Check post exists
+		if (!existingPost)
 			return res.status(404).json({ message: "Post not found" });
-		}
 
 		// Create a new comment object
-		const newComment = {
-			user: userId,
-			text,
-			createdAt: Date.now(),
+		const newComment = new Comment({
+			user,
+			post,
+			content,
+		});
+
+		// Save the new comment to the database
+		await newComment.save();
+		existingPost.comments.push(newComment._id);
+		await existingPost.save();
+
+		const returnComment = {
+			_id: newComment._id,
+			user: {
+				firstName: userObj.firstName,
+				lastName: userObj.lastName,
+				userName: userObj.userName,
+				email: userObj.email,
+				avatar: userObj.avatar,
+			},
+			replies: newComment.replies,
+			content: newComment.content,
+			createdAt: newComment.createdAt,
+			updatedAt: newComment.updatedAt,
 		};
 
-		// Add the comment to the post
-		post.comments.push(newComment);
-		await post.save();
+		console.log({ newComment, returnComment });
 
-		res.json({ message: "Comment added successfully" });
+		res.json({
+			message: "Comment added successfully",
+			comment: returnComment,
+		});
 	} catch (error) {
+		console.log({ error: error.message });
+		res.status(500).json({ error: error.message });
+	}
+}
+
+async function getSavedAndLiked(req, res) {
+	try {
+		const { postId, userId } = req.params;
+
+		// Find the user by ID
+		const user = await User.findById(userId);
+		//  Find the post by ID
+		const post = await Post.findById(postId);
+
+		// Check user exists
+		if (!user) return res.status(404).json({ message: "User not found" });
+		// Check post exists
+		if (!post) return res.status(404).json({ message: "Post not found" });
+
+		// Check if the user has liked or saved the post
+		const isLiked = user.likedPosts.includes(postId);
+		const isSaved = user.savedPosts.includes(postId);
+
+		console.log({ isLiked, isSaved, liked: post.likes });
+
+		res.json({
+			isLiked,
+			isSaved,
+			likes: post.likes ?? 0,
+		});
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({ error: error.message });
+	}
+}
+
+async function addLike(req, res) {
+	try {
+		const { postId, userId, isLiked } = req.body;
+
+		// Find the user by ID
+		const user = await User.findById(userId);
+		//  Find the post by ID
+		const post = await Post.findById(postId);
+
+		// Check user exists
+		if (!user) return res.status(404).json({ message: "User not found" });
+		// Check post exists
+		if (!post) return res.status(404).json({ message: "Post not found" });
+
+		// Toggle the isLiked property of the post in the user's likedPosts array
+		const index = user.likedPosts.indexOf(postId);
+
+		console.log({ index, isLiked, likes: post.likes });
+
+		if (isLiked && index === -1) {
+			user.likedPosts.push(postId);
+
+			post.likes += 1;
+		} else if (!isLiked && index !== -1) {
+			user.likedPosts.splice(index, 1);
+
+			if (post.likes > 0) {
+				post.likes -= 1;
+			}
+		}
+
+		console.log({ isLiked, likes: post.likes });
+
+		await post.save();
+		await user.save();
+
+		res.json({
+			isLiked,
+			likes: post.likes,
+			message: "Post saved status updated successfully",
+		});
+	} catch (error) {
+		console.log(error.message);
 		res.status(500).json({ error: error.message });
 	}
 }
@@ -140,6 +230,7 @@ async function savePost(req, res) {
 			message: "Post saved status updated successfully",
 		});
 	} catch (error) {
+		console.log(error.message);
 		res.status(500).json({ error: error.message });
 	}
 }
@@ -147,6 +238,7 @@ async function savePost(req, res) {
 module.exports = {
 	getAllPosts,
 	getPostBySlug,
+	getSavedAndLiked,
 	addLike,
 	addComment,
 	savePost,

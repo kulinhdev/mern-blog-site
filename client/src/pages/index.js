@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "@/utils/backendApi";
 import PostList from "@/components/PostListClient";
-import ClientLayout from "@/components/layouts/ClientLayout";
+import ClientLayout from "@/layouts/ClientLayout";
 
 const Index = () => {
 	const [posts, setPosts] = useState([]);

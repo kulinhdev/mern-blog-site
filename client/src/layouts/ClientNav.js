@@ -1,20 +1,38 @@
-import { DarkThemeToggle, Flowbite } from "flowbite-react";
+import { Avatar, DarkThemeToggle, Dropdown, Flowbite } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 function ClientNav() {
-	const [isLogin, setIsLogin] = useState(false);
+	const [userAccount, setUserAccount] = useState(false);
 
 	useEffect(() => {
 		const refreshToken = Cookies.get("refresh_token");
 		const user = localStorage.getItem("user");
 
+		console.log({ user });
+
 		if (refreshToken && user) {
-			setIsLogin(true);
+			setUserAccount(JSON.parse(user));
 		}
 	}, []);
+
+	const onLogOutUser = () => {
+		localStorage.removeItem("user");
+
+		// Display success message
+		Swal.fire({
+			position: "top-end",
+			icon: "success",
+			title: "Logout Successful!",
+			showConfirmButton: false,
+			timer: 1500,
+		});
+
+		setUserAccount(null);
+	};
 
 	return (
 		<nav className="bg-gray-300 border-gray-200 dark:bg-gray-900">
@@ -72,91 +90,42 @@ function ClientNav() {
 					<Flowbite>
 						<DarkThemeToggle className="mr-5 border-2 border-gray-400 rounded-3xl" />
 					</Flowbite>
-					{isLogin ? (
-						<div className="flex items-center md:order-2">
-							<button
-								type="button"
-								className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-								id="user-menu-button"
-								aria-expanded="false"
-								data-dropdown-toggle="user-dropdown"
-								data-dropdown-placement="bottom"
-							>
-								<span className="sr-only">Open user menu</span>
-								<Image
-									src="/images/client/profile-picture.jpg"
-									alt="avatar"
-									width={150}
-									height={150}
-									className="w-8 h-8 rounded-full"
+					{userAccount ? (
+						<Dropdown
+							arrowIcon={false}
+							inline={true}
+							label={
+								<Avatar
+									alt="Avatar"
+									img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+									rounded={true}
+									bordered={true}
+									color="purple"
 								/>
-							</button>
-							{/* <!-- Dropdown menu --> */}
-							<div
-								className="z-50 hidden my-4 text-base list-none bg-gray-200 divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-								id="user-dropdown"
-							>
-								<div className="px-4 py-3">
-									<span className="block text-sm text-gray-900 dark:text-white">
-										Pham Ngoc Linh
-									</span>
-									<span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-										linhpn@gmail.com
-									</span>
-								</div>
-								<ul
-									className="py-2"
-									aria-labelledby="user-menu-button"
-								>
-									<li>
-										<p
-											href="#"
-											className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-										>
-											Profile
-										</p>
-									</li>
-									<li>
-										<p
-											href="#"
-											className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-										>
-											My favorites
-										</p>
-									</li>
-									<li>
-										<p
-											href="#"
-											className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-										>
-											Sign out
-										</p>
-									</li>
-								</ul>
-							</div>
-							<button
-								data-collapse-toggle="mobile-menu-2"
-								type="button"
-								className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-								aria-controls="mobile-menu-2"
-								aria-expanded="false"
-							>
-								<span className="sr-only">Open main menu</span>
-								<svg
-									className="w-6 h-6"
-									aria-hidden="true"
-									fill="currentColor"
-									viewBox="0 0 20 20"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										fillRule="evenodd"
-										d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-										clipRule="evenodd"
-									></path>
-								</svg>
-							</button>
-						</div>
+							}
+						>
+							<Dropdown.Header>
+								<span className="block text-sm">
+									Hi,
+									{userAccount && (
+										<span className="ml-1 font-medium truncate">
+											{userAccount.firstName}{" "}
+											{userAccount.lastName}
+										</span>
+									)}
+								</span>
+								<span className="block truncate text-sm font-medium">
+									{userAccount && userAccount.email}
+								</span>
+							</Dropdown.Header>
+							<Dropdown.Item>Dashboard</Dropdown.Item>
+							<Dropdown.Item>Settings</Dropdown.Item>
+							<Dropdown.Item>Earnings</Dropdown.Item>
+							<Dropdown.Divider />
+							<Dropdown.Item onClick={onLogOutUser}>
+								Sign out
+							</Dropdown.Item>
+						</Dropdown>
 					) : (
 						<div className="flex items-center md:order-2">
 							<Link href="/client/auth/login">

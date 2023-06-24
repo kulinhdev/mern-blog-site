@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import axios from "axios";
-import { setAccessTokenAdmin } from "@/utils/common";
+import { setAccessTokenUser } from "@/utils/common";
 
 const baseURL = "http://localhost:5005"; // "https://mearn-blog-backend.onrender.com";
 
@@ -25,7 +25,7 @@ async function updateAccessToken() {
 		console.log("response get /refresh-token ==> ", response);
 
 		// Save new tokens to cookies
-		setAccessTokenAdmin(response.data.access_token);
+		setAccessTokenUser(response.data.access_token);
 
 		return response.data.access_token;
 	} catch (error) {
