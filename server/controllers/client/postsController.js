@@ -1,5 +1,6 @@
 const Comment = require("../../models/Comment");
 const Post = require("../../models/Post");
+const Reply = require("../../models/Reply");
 const User = require("../../models/User");
 
 async function getAllPosts(req, res) {
@@ -39,16 +40,28 @@ async function getAllPosts(req, res) {
 
 async function getPostBySlug(req, res) {
 	try {
-		const post = await Post.findOne({ slug: req.params.slug }).populate({
-			path: "comments",
-			populate: {
-				path: "user",
-				model: "User",
-				select: "firstName lastName userName email avatar",
-			},
-		});
+		const post = await Post.findOne({ slug: req.params.slug })
+			.populate({
+				path: "comments",
+				populate: {
+					path: "user",
+					model: "User",
+					select: "firstName lastName userName email avatar",
+				},
+				options: { sort: { createdAt: -1 } }, // sort: newest to oldest
+			})
+			.populate({
+				path: "comments.replies",
+				populate: {
+					path: "user",
+					model: "User",
+					select: "firstName lastName userName email avatar",
+				},
+				options: { sort: { createdAt: -1 } },
+				match: { "replies.createdAt": { $exists: true } },
+				sort: { "replies.createdAt": -1 },
+			});
 
-		console.log({ post });
 		if (!post) {
 			return res.status(404).json({ message: "Post not found" });
 		}
@@ -121,6 +134,57 @@ async function addComment(req, res) {
 		res.json({
 			message: "Comment added successfully",
 			comment: returnComment,
+		});
+	} catch (error) {
+		console.log({ error: error.message });
+		res.status(500).json({ error: error.message });
+	}
+}
+
+async function addCommentReply(req, res) {
+	try {
+		const { user, comment, content } = req.body;
+
+		// Find the user by ID
+		const userObj = await User.findById(user);
+
+		// Find the comment by ID
+		let existingComment = await Comment.findById(comment);
+
+		// Check user exists
+		if (!userObj)
+			return res.status(404).json({ message: "User not found" });
+
+		// Check comment exists
+		if (!existingComment)
+			return res.status(404).json({ message: "Comment not found" });
+
+		// Create a new reply subDocument and add it to the existing comment's replies array
+		const newReply = {
+			user,
+			content,
+		};
+
+		existingComment.replies.push(newReply);
+
+		// Save the modified comment object to the database
+		await existingComment.save();
+
+		// Fetch the modified comment object again with all its replies and related user information
+		existingComment = await Comment.findById(existingComment._id)
+			.populate("user", "firstName lastName userName email avatar")
+			.populate({
+				path: "replies",
+				populate: {
+					path: "user",
+					select: "firstName lastName userName email avatar",
+				},
+				options: { sort: { createdAt: -1 } }, // order: newest to oldest
+			});
+
+		res.json({
+			message: "Reply added successfully",
+			comment: existingComment,
 		});
 	} catch (error) {
 		console.log({ error: error.message });
@@ -240,6 +304,7 @@ module.exports = {
 	getPostBySlug,
 	getSavedAndLiked,
 	addLike,
-	addComment,
 	savePost,
+	addComment,
+	addCommentReply,
 };

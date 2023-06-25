@@ -8,11 +8,6 @@ const ReplySchema = new mongoose.Schema(
 			ref: "User",
 			required: true,
 		},
-		comment: {
-			type: mongoose.ObjectId,
-			ref: "Comment",
-			required: true,
-		},
 	},
 	{ timestamps: true }
 );

@@ -23,6 +23,7 @@ const Post = () => {
 	const [likes, setLikes] = useState(0);
 	const [comments, setComments] = useState([]);
 	const [commentText, setCommentText] = useState();
+	const [commentReplyText, setCommentReplyText] = useState();
 	const [userAccount, setUserAccount] = useState(false);
 	const [replyingTo, setReplyingTo] = useState(null);
 
@@ -114,7 +115,7 @@ const Post = () => {
 			content: commentText,
 			user: userAccount.id,
 			post: post.id,
-			replyingTo
+			replyingTo,
 		};
 
 		console.log({ requestBody });
@@ -122,8 +123,39 @@ const Post = () => {
 		const response = await api.post(`api/posts/comment`, requestBody);
 		console.log("add comment", response);
 		if (response.status == 200) {
-			setComments([...comments, response.data.comment]);
+			setComments([response.data.comment, ...comments]);
 			setCommentText("");
+		}
+	};
+
+	const handleSubmitCommentReply = async (e) => {
+		e.preventDefault();
+		CheckIsLoggedIn();
+
+		const requestBody = {
+			content: commentReplyText,
+			user: userAccount.id,
+			comment: replyingTo,
+		};
+
+		console.log({ requestBody });
+
+		const response = await api.post(`api/posts/comment-reply`, requestBody);
+		console.log("add comment reply", response);
+		if (response.status == 200) {
+			const updatedComments = comments.map((comment) => {
+				if (comment._id === response.data.comment._id) {
+					return {
+						...comment,
+						replies: response.data.comment.replies,
+					};
+				} else {
+					return comment;
+				}
+			});
+
+			setComments(updatedComments);
+			setCommentReplyText("");
 		}
 	};
 
@@ -275,16 +307,16 @@ const Post = () => {
 											{replyingTo == comment._id && (
 												<form
 													onSubmit={
-														handleSubmitComment
+														handleSubmitCommentReply
 													}
-													className="flex items-center pb-2 pt-2 pl-10"
+													className="flex items-center pb-2 pt-2 ml-10"
 												>
 													<textarea
 														type="text"
 														name="comment"
-														value={commentText}
+														value={commentReplyText}
 														onChange={(e) =>
-															setCommentText(
+															setCommentReplyText(
 																e.target.value
 															)
 														}
@@ -304,7 +336,7 @@ const Post = () => {
 												comment.replies.map((reply) => (
 													<div
 														key={reply._id}
-														className="bg-gray-50 rounded-lg p-4 ml-16 mt-4"
+														className="bg-gray-50 rounded-lg p-4 ml-10 mt-4"
 													>
 														<div className="flex items-center justify-between">
 															<div className="flex items-center">
