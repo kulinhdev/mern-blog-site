@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout";
+import AdminLayout from "@/layouts/AdminLayout";
 import { formatDate } from "@/utils/common";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";

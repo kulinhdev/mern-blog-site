@@ -115,9 +115,12 @@ async function getPostById(req, res) {
 
 		// Map the posts and add the image URLs
 
-		const categories = await Category.find({
-			_id: { $in: post.categories },
-		});
+		const categories = await Category.find(
+			{
+				_id: { $in: post.categories },
+			},
+			{ _id: 0, id: "$_id" }
+		);
 
 		const postWithImage = {
 			id: post._id,
@@ -185,7 +188,7 @@ async function updatePost(req, res) {
 		// Check if the title change generate new slug
 		if (title && title !== post.title) {
 			post.title = title;
-			await generateSlug(post); // Generate a unique slug before saving
+			await generateSlug(post, Post); // Generate a unique slug before saving
 		}
 
 		// Update the post with the new data
@@ -202,6 +205,7 @@ async function updatePost(req, res) {
 			message: `Updated post ${req.params.id} successfully`,
 		});
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({
 			error: `Update post ${postId} failed: ${error.message}`,
 		});

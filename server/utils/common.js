@@ -7,6 +7,7 @@ async function generateSlug(newItem, Model) {
 		lower: true,
 		strict: true,
 	});
+	console.log("Generate slug: ", slug);
 	newItem.slug = slug;
 	let isFound = await Model.findOne({ slug }).exec();
 	if (isFound) {

@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layouts/AdminLayout";
+import AdminLayout from "@/layouts/AdminLayout";
 import { useState, useEffect } from "react";
 import api from "@/utils/backendApi";
 import Link from "next/link";

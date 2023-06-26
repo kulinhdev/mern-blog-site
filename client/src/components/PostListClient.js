@@ -6,13 +6,13 @@ function PostListClient({ posts }) {
 		<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 			{posts.map((post) => (
 				<div
-					key={post._id}
+					key={post.id}
 					className="bg-gray-200 shadow-md rounded-md my-3 p-4"
 				>
 					<img
 						src={post.imageUrl}
 						alt={post.title}
-						className="mb-4 w-full max-h-fit rounded-md"
+						className="mb-4 w-full h-80 rounded-md"
 					/>
 					<h2 className="text-xl font-bold mb-2">{post.title}</h2>
 					<div className="text-gray-500 mb-4">
