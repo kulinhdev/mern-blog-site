@@ -1,7 +1,7 @@
 import { formatDate, formatDateTime } from "@/utils/common";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import api from "@/utils/frontendApi";
+import api from "@/services/frontendApi";
 import Swal from "sweetalert2";
 import {
 	BookmarkIcon as BookmarkIconOutline,
@@ -12,7 +12,7 @@ import {
 	HeartIcon,
 	ArrowUturnLeftIcon,
 } from "@heroicons/react/24/solid";
-import ClientLayout from "@/layouts/ClientLayout";
+import ClientLayout from "@/components/layouts/ClientLayout";
 import { Avatar } from "flowbite-react";
 
 const Post = () => {

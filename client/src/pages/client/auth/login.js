@@ -1,4 +1,4 @@
-import api from "@/utils/backendApi";
+import api from "@/services/backendApi";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";

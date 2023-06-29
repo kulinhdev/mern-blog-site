@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { WithContext as ReactTags } from "react-tag-input";
-import AdminLayout from "@/layouts/AdminLayout";
-import api from "@/utils/backendApi";
+import AdminLayout from "@/components/layouts/AdminLayout";
+import api from "@/services/backendApi";
 import dynamic from "next/dynamic";
 import Swal from "sweetalert2";
 
