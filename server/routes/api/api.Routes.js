@@ -10,10 +10,12 @@ const adminAuthRoutes = require("./admin/auth.Routes");
 // *** Client routes import ***
 const clientAuthRoutes = require("./client/auth.Routes");
 const clientPostRoutes = require("./client/post.Routes");
+const clientCategoryRoutes = require("./client/category.Routes");
 
 // === Client routes === \\
 router.use("/auth", clientAuthRoutes);
 router.use("/posts", clientPostRoutes);
+router.use("/categories", clientCategoryRoutes);
 
 // === Admin routes === \\
 router.use("/admin/auth", adminAuthRoutes);
