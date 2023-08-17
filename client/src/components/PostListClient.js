@@ -12,7 +12,7 @@ function PostListClient({ posts }) {
 					<img
 						src={post.imageUrl}
 						alt={post.title}
-						className="mb-4 w-full h-80 rounded-md"
+						className="mx-auto my-2 h-96 w-auto rounded-md"
 					/>
 					<h2 className="text-xl font-bold mb-2">{post.title}</h2>
 					<div className="text-gray-500 mb-4">
