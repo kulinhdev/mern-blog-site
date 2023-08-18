@@ -12,6 +12,8 @@ router.get("/:postId/user/:userId", postController.getSavedAndLiked);
 
 router.post("/save", postController.savePost);
 
+router.get("/user/:userId/saved", postController.getAllSavedPostsByUser);
+
 router.post("/like", postController.addLike);
 
 router.post("/comment", postController.addComment);
