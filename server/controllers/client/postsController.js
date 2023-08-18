@@ -7,7 +7,7 @@ async function getAllPosts(req, res) {
 	const page = req.query.page || 1;
 	const limit = 10;
 	const skip = (page - 1) * limit;
-	const searchTerm = req.query.title || "";
+	const searchTerm = req.query.search || "";
 
 	try {
 		const count = await Post.countDocuments({
@@ -18,7 +18,11 @@ async function getAllPosts(req, res) {
 		})
 			.sort("-createdAt")
 			.skip(skip)
-			.limit(limit);
+			.limit(limit)
+			.populate({
+				path: "categories",
+				options: { sort: { createdAt: -1 } }, // sort: newest to oldest
+			});
 
 		// Map the posts and add the image URLs
 		const postsWithImages = posts.map((post) => ({
@@ -28,12 +32,67 @@ async function getAllPosts(req, res) {
 			readingMinutes: post.readingMinutes,
 			slug: post.slug,
 			tags: post.tags,
+			categories: post.categories,
 			createdAt: post.createdAt,
 			imageUrl: `${req.protocol}://${req.get("host")}/${post.image}`,
 		}));
 
 		res.status(200).json({ count, posts: postsWithImages });
 	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
+}
+
+async function getPostById(req, res) {
+	console.log(req.params.id);
+	try {
+		const post = await Post.findOne({ _id: req.params.id })
+			.populate({
+				path: "categories",
+				options: { sort: { createdAt: -1 } },
+			})
+			.populate({
+				path: "comments",
+				populate: {
+					path: "user",
+					model: "User",
+					select: "firstName lastName userName email avatar",
+				},
+				options: { sort: { createdAt: -1 } }, // sort: newest to oldest
+			})
+			.populate({
+				path: "comments.replies",
+				populate: {
+					path: "user",
+					model: "User",
+					select: "firstName lastName userName email avatar",
+				},
+				options: { sort: { createdAt: -1 } },
+				match: { "replies.createdAt": { $exists: true } },
+				sort: { "replies.createdAt": -1 },
+			});
+
+		if (!post) {
+			return res.status(404).json({ message: "Post not found" });
+		}
+
+		// Map the posts and add the image URLs
+		const postWithImage = {
+			id: post._id,
+			title: post.title,
+			content: post.content,
+			readingMinutes: post.readingMinutes,
+			slug: post.slug,
+			tags: post.tags,
+			comments: post.comments,
+			categories: post.categories,
+			createdAt: post.createdAt,
+			imageUrl: `${req.protocol}://${req.get("host")}/${post.image}`,
+		};
+
+		res.json(postWithImage);
+	} catch (error) {
+		console.log({ error: error.message });
 		res.status(500).json({ error: error.message });
 	}
 }
@@ -301,6 +360,7 @@ async function savePost(req, res) {
 
 module.exports = {
 	getAllPosts,
+	getPostById,
 	getPostBySlug,
 	getSavedAndLiked,
 	addLike,

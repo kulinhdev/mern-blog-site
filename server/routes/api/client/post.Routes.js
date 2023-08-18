@@ -4,7 +4,9 @@ const postController = require("../../../controllers/client/postsController");
 
 router.get("/", postController.getAllPosts);
 
-router.get("/:slug", postController.getPostBySlug);
+router.get("/id/:id", postController.getPostById);
+
+router.get("/slug/:slug", postController.getPostBySlug);
 
 router.get("/:postId/user/:userId", postController.getSavedAndLiked);
 
