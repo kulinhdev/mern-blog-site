@@ -16,8 +16,9 @@ function CategoryPage() {
 		const response = await api.get(
 			`/api/admin/categories/search?page=${page}&limit=${limit}&title=${searchTerm}`
 		);
+		console.log(response.data.count);
 		if (response.status === 200) {
-			setCurrentPage(page);
+			setCurrentPage(currentPage);
 			setPages(Math.ceil(response.data.count / limit));
 			setCategories(response.data.categories);
 		}
