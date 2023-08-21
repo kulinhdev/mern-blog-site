@@ -31,7 +31,7 @@ const Post = () => {
 		const user = localStorage.getItem("user");
 		const { slug } = router.query;
 		const fetchPost = async () => {
-			const { data } = await api.get(`api/posts/${router.query.slug}`);
+			const { data } = await api.get(`api/posts/slug/${router.query.slug}`);
 			setPost(data);
 			setComments(data.comments);
 

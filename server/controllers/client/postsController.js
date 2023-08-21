@@ -53,23 +53,23 @@ async function getPostById(req, res) {
 			})
 			.populate({
 				path: "comments",
-				populate: {
-					path: "user",
-					model: "User",
-					select: "firstName lastName userName email avatar",
-				},
+				populate: [
+					{
+						path: "user",
+						model: "User",
+						select: "firstName lastName userName email avatar",
+					},
+					{
+						path: "replies",
+						populate: {
+							path: "user",
+							model: "User",
+							select: "firstName lastName userName email avatar",
+						},
+						options: { sort: { createdAt: 1 } },
+					},
+				],
 				options: { sort: { createdAt: -1 } }, // sort: newest to oldest
-			})
-			.populate({
-				path: "comments.replies",
-				populate: {
-					path: "user",
-					model: "User",
-					select: "firstName lastName userName email avatar",
-				},
-				options: { sort: { createdAt: -1 } },
-				match: { "replies.createdAt": { $exists: true } },
-				sort: { "replies.createdAt": -1 },
 			});
 
 		if (!post) {
@@ -358,6 +358,46 @@ async function savePost(req, res) {
 	}
 }
 
+async function getAllSavedPostsByUser(req, res) {
+	try {
+		const userId = req.params.userId;
+		const user = await User.findById(userId);
+
+		// Check user exists
+		if (!user) return res.status(404).json({ message: "User not found" });
+
+		// Fetch the saved posts and populate them using .populate()
+		const posts = await Post.find({
+			_id: { $in: user.savedPosts },
+		})
+			.sort("-createdAt")
+			.populate({
+				path: "categories",
+				options: { sort: { createdAt: -1 } },
+			})
+			.exec();
+
+		// Map the posts and add the image URLs
+		const postsWithImages = posts.map((post) => ({
+			key: post._id,
+			id: post._id,
+			title: post.title,
+			content: post.content,
+			readingMinutes: post.readingMinutes,
+			slug: post.slug,
+			tags: post.tags,
+			categories: post.categories,
+			createdAt: post.createdAt,
+			imageUrl: `${req.protocol}://${req.get("host")}/${post.image}`,
+		}));
+
+		res.status(200).json({ posts: postsWithImages });
+	} catch (error) {
+		console.log({ error: error.message });
+		res.status(500).json({ error: error.message });
+	}
+}
+
 module.exports = {
 	getAllPosts,
 	getPostById,
@@ -367,4 +407,5 @@ module.exports = {
 	savePost,
 	addComment,
 	addCommentReply,
+	getAllSavedPostsByUser,
 };
