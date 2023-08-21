@@ -10,9 +10,9 @@ const seedPosts = require("./seedPost");
 const seedUsers = require("./seedUsers");
 
 async function seedAllData() {
-	await seedCategories(10);
-	// await seedPosts(10);
 	// await seedUsers(10);
+	// await seedCategories(10);
+	await seedPosts(10);
 }
 
 seedAllData()

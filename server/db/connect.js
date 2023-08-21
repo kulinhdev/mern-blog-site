@@ -1,12 +1,16 @@
-// Import required libraries
 const mongoose = require("mongoose");
 
-// Connect to MongoDB
+let connection = null;
+
 async function connectToDatabase(connectionString) {
 	try {
-		await mongoose.connect(connectionString);
-		console.log("You successfully connected to MongoDB..!");
-		return mongoose.connection;
+		if (!connection) {
+			connection = await mongoose.connect(connectionString);
+			console.log("You successfully connected to MongoDB..!");
+		} else {
+			console.log("Exist connected to MongoDB..!");
+			return connection;
+		}
 	} catch (error) {
 		console.error("Error when connecting to MongoDB: ", error);
 	}

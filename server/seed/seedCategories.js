@@ -1,6 +1,12 @@
 const faker = require("faker");
 const Category = require("../models/Category");
 
+const configs = require("../config/keys");
+const connectToDatabase = require("../db/connect");
+
+// Connect to database
+const connection = connectToDatabase(configs.mongoDbConnectionString);
+
 // Function to generate fake data
 const generateFakeCategory = () => {
 	const uniqueImageIdentifier = faker.random.alphaNumeric(10);
@@ -13,7 +19,7 @@ const generateFakeCategory = () => {
 };
 
 // Function to seed fake data
-const seedFakeData = async (count) => {
+const seedCategories = async (count) => {
 	try {
 		// Clear existing categories before seeding
 		await Category.deleteMany();
@@ -23,10 +29,12 @@ const seedFakeData = async (count) => {
 			await Category.create(fakeCategory);
 			console.log(`Category ${i + 1} created`);
 		}
-		console.log("Fake data seeding complete");
+		console.log("Categories seeding complete");
 	} catch (error) {
-		console.error("Error seeding fake data:", error);
+		console.error("Error seeding categories:", error);
+	} finally {
+		connection.disconnect();
 	}
 };
 
-module.exports = seedFakeData;
+module.exports = seedCategories;
