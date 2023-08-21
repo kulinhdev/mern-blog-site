@@ -8,15 +8,29 @@ async function getAllPosts(req, res) {
 	const limit = 10;
 	const skip = (page - 1) * limit;
 	const searchTerm = req.query.search || "";
+	const sortValue = req.query.sort || "newest";
+
+	console.log({ sortValue });
 
 	try {
+		let sortOption = {};
+		if (sortValue === "newest") {
+			sortOption = { createdAt: -1 };
+		} else if (sortValue === "oldest") {
+			sortOption = { createdAt: 1 };
+		} else if (sortValue === "a-z") {
+			sortOption = { title: 1 };
+		} else if (sortValue === "z-a") {
+			sortOption = { title: -1 };
+		}
+
 		const count = await Post.countDocuments({
 			title: { $regex: searchTerm, $options: "i" },
 		});
 		const posts = await Post.find({
 			title: { $regex: searchTerm, $options: "i" },
 		})
-			.sort("-createdAt")
+			.sort(sortOption)
 			.skip(skip)
 			.limit(limit)
 			.populate({
@@ -291,37 +305,43 @@ async function addLike(req, res) {
 		//  Find the post by ID
 		const post = await Post.findById(postId);
 
-		// Check user exists
-		if (!user) return res.status(404).json({ message: "User not found" });
-		// Check post exists
-		if (!post) return res.status(404).json({ message: "Post not found" });
+		if (!user || !post) {
+			return res.status(404).json({ message: "User or post not found" });
+		}
 
 		// Toggle the isLiked property of the post in the user's likedPosts array
 		const index = user.likedPosts.indexOf(postId);
 
-		console.log({ index, isLiked, likes: post.likes });
+		let likes = post.likes;
 
-		if (isLiked && index === -1) {
-			user.likedPosts.push(postId);
-
-			post.likes += 1;
-		} else if (!isLiked && index !== -1) {
-			user.likedPosts.splice(index, 1);
-
-			if (post.likes > 0) {
-				post.likes -= 1;
-			}
+		if (!likes) {
+			likes = 0;
 		}
 
-		console.log({ isLiked, likes: post.likes });
+		console.log({ index, isLiked, likes });
 
-		await post.save();
-		await user.save();
+		if ((isLiked && index === -1) || (!isLiked && index !== -1)) {
+			if (isLiked) {
+				user.likedPosts.push(postId);
+				likes += 1;
+			} else {
+				user.likedPosts.splice(index, 1);
+				if (likes > 0) {
+					likes -= 1;
+				}
+			}
+			// Set new likes
+			post.likes = likes;
+			await post.save();
+			await user.save();
+		}
+
+		console.log({ isLiked, likes });
 
 		res.json({
 			isLiked,
 			likes: post.likes,
-			message: "Post saved status updated successfully",
+			message: "Post ${isSaved ? 'liked' : 'disliked'}  successfully",
 		});
 	} catch (error) {
 		console.log(error.message);
@@ -350,7 +370,7 @@ async function savePost(req, res) {
 
 		res.json({
 			isSaved,
-			message: "Post saved status updated successfully",
+			message: `Post ${isSaved ? "saved" : "unsaved"} successfully`,
 		});
 	} catch (error) {
 		console.log(error.message);
