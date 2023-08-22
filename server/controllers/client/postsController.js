@@ -5,12 +5,13 @@ const User = require("../../models/User");
 
 async function getAllPosts(req, res) {
 	const page = req.query.page || 1;
-	const limit = 10;
+	const limit = req.query.limit || 10;
 	const skip = (page - 1) * limit;
 	const searchTerm = req.query.search || "";
 	const sortValue = req.query.sort || "newest";
+	const selectedCategoryIds = req.query.categories || "";
 
-	console.log({ sortValue });
+	console.log({ page, limit, skip, selectedCategoryIds });
 
 	try {
 		let sortOption = {};
@@ -24,18 +25,29 @@ async function getAllPosts(req, res) {
 			sortOption = { title: -1 };
 		}
 
-		const count = await Post.countDocuments({
+		// Split the selectedCategoryIds string into an array of category IDs
+		const categoryIdsArray = selectedCategoryIds.split(",").filter(Boolean);
+
+		// Define the filter criteria based on search term and selected categories
+		const filterCriteria = {
 			title: { $regex: searchTerm, $options: "i" },
-		});
-		const posts = await Post.find({
-			title: { $regex: searchTerm, $options: "i" },
-		})
+		};
+
+		// If categoryIdsArray is not empty, add the categories filter to the criteria
+		if (categoryIdsArray.length > 0) {
+			filterCriteria.categories = { $in: categoryIdsArray };
+		}
+
+		// Get the count of posts based on the filter criteria
+		const count = await Post.countDocuments(filterCriteria);
+
+		const posts = await Post.find(filterCriteria)
 			.sort(sortOption)
 			.skip(skip)
 			.limit(limit)
 			.populate({
 				path: "categories",
-				options: { sort: { createdAt: -1 } }, // sort: newest to oldest
+				options: { sort: { createdAt: -1 } },
 			});
 
 		// Map the posts and add the image URLs
