@@ -57,6 +57,7 @@ async function getAllPosts(req, res) {
 			content: post.content,
 			readingMinutes: post.readingMinutes,
 			slug: post.slug,
+			likes: post.likes,
 			tags: post.tags,
 			categories: post.categories,
 			createdAt: post.createdAt,
@@ -109,6 +110,7 @@ async function getPostById(req, res) {
 			content: post.content,
 			readingMinutes: post.readingMinutes,
 			slug: post.slug,
+			likes: post.likes,
 			tags: post.tags,
 			comments: post.comments,
 			categories: post.categories,
@@ -158,6 +160,7 @@ async function getPostBySlug(req, res) {
 			content: post.content,
 			readingMinutes: post.readingMinutes,
 			slug: post.slug,
+			likes: post.likes,
 			tags: post.tags,
 			comments: post.comments,
 			createdAt: post.createdAt,
@@ -277,7 +280,7 @@ async function addCommentReply(req, res) {
 	}
 }
 
-async function getSavedAndLiked(req, res) {
+async function getSavedAndLikedStatus(req, res) {
 	try {
 		const { postId, userId } = req.params;
 
@@ -417,6 +420,7 @@ async function getAllSavedPostsByUser(req, res) {
 			content: post.content,
 			readingMinutes: post.readingMinutes,
 			slug: post.slug,
+			likes: post.likes,
 			tags: post.tags,
 			categories: post.categories,
 			createdAt: post.createdAt,
@@ -430,14 +434,37 @@ async function getAllSavedPostsByUser(req, res) {
 	}
 }
 
+async function getUserSavedLikedCounts(req, res) {
+	try {
+		const userId = req.params.userId;
+		const user = await User.findById(userId);
+
+		// Check user exists
+		if (!user) return res.status(404).json({ message: "User not found" });
+
+		const savedLikedCounts = {
+			likedCount: user.likedPosts.length,
+			savedCount: user.savedPosts.length,
+		};
+
+		console.log({ savedLikedCounts });
+
+		res.status(200).json({ savedLikedCounts });
+	} catch (error) {
+		console.log({ error: error.message });
+		res.status(500).json({ error: error.message });
+	}
+}
+
 module.exports = {
 	getAllPosts,
 	getPostById,
 	getPostBySlug,
-	getSavedAndLiked,
+	getSavedAndLikedStatus,
 	addLike,
 	savePost,
 	addComment,
 	addCommentReply,
 	getAllSavedPostsByUser,
+	getUserSavedLikedCounts,
 };
