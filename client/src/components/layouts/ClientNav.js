@@ -1,12 +1,13 @@
 import { Avatar, DarkThemeToggle, Dropdown, Flowbite } from "flowbite-react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import Image from "next/image";
 import Link from "next/link";
 import Swal from "sweetalert2";
 
 function ClientNav() {
 	const [userAccount, setUserAccount] = useState(false);
+	const router = useRouter();
 
 	useEffect(() => {
 		const refreshToken = Cookies.get("refresh_token");
@@ -34,10 +35,17 @@ function ClientNav() {
 		setUserAccount(null);
 	};
 
+	// Define a function to check if a route is active
+	const isRouteActive = (href) => {
+		return router.pathname === href
+			? " md:text-blue-700 md:dark:text-blue-500"
+			: "";
+	};
+
 	return (
 		<nav className="bg-gray-300 border-gray-200 dark:bg-gray-900">
 			<div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-				<p href="https://flowbite.com/" className="flex items-center">
+				<p className="flex items-center">
 					<img
 						src="https://flowbite.com/docs/images/logo.svg"
 						className="h-8 mr-3"
@@ -54,7 +62,9 @@ function ClientNav() {
 					<ul className="flex flex-col font-medium p-4 md:p-0 mt-4 md:flex-row md:space-x-8 md:mt-0 text-gray-800 dark:text-gray-50 dark:bg-gray-900 dark:border-gray-700">
 						<Link href="/">
 							<p
-								className="block py-2 pl-3 pr-4 bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+								className={`block py-2 pl-3 pr-4 bg-blue-700 rounded md:bg-transparent md:p-0 ${isRouteActive(
+									"/"
+								)}`}
 								aria-current="page"
 							>
 								Home
@@ -62,8 +72,10 @@ function ClientNav() {
 						</Link>
 						<Link href="/client/posts">
 							<p
-								href="#"
-								className="block py-2 pl-3 pr-4 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+								className={`block py-2 pl-3 pr-4 bg-blue-700 rounded md:bg-transparent md:p-0 ${isRouteActive(
+									"/client/posts"
+								)}`}
+								aria-current="page"
 							>
 								Posts
 							</p>

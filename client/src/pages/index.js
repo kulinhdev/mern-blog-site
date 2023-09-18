@@ -14,25 +14,26 @@ const Index = () => {
 
 	const fetchData = async (page = 1) => {
 		const response = await api.get(
-			`/api/posts?page=${page}&title=${searchTerm}&category=${selectedCategory}`
+			`/api/posts?page=${page}&limit=6&title=${searchTerm}&category=${selectedCategory}`
 		);
+		console.log("Search: ", page, searchTerm, selectedCategory, response);
 		setCurrentPage(page);
-		setPages(Math.ceil(response.data.count / 5));
+		setPages(Math.ceil(response.data.count / 6));
 		setPosts(response.data.posts);
 	};
 
 	useEffect(() => {
 		const fetchPosts = async () => {
-			const response = await api.get("/api/posts");
+			const response = await api.get("/api/posts?page=1&limit=6");
+			console.log(response.data.count);
 			if (response.status === 200) {
-				setPages(Math.ceil(response.data.count / 5));
+				setPages(Math.ceil(response.data?.count / 6));
 				setPosts(response.data?.posts);
 			}
 		};
 
 		const fetchCategories = async () => {
 			const response = await api.get("/api/admin/categories");
-			console.log({ cate: response });
 			if (response.status === 200) {
 				setCategories(response.data.categories);
 			}
