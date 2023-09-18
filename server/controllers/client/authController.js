@@ -157,4 +157,5 @@ function refreshToken(req, res) {
 	});
 }
 
+
 module.exports = { register, login, refreshToken };
