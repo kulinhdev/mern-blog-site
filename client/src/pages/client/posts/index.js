@@ -11,21 +11,20 @@ const Index = () => {
 
 	const fetchData = async (page = 1) => {
 		const response = await api.get(
-			`/api/admin/posts?page=${page}&title=${searchTerm}`
+			`/api/admin/posts?page=${page}&limit=6&title=${searchTerm}`
 		);
 		setCurrentPage(page);
-		setPages(Math.ceil(response.data.count / 10));
+		setPages(Math.ceil(response.data.count / 6));
 		setPosts(response.data.posts);
 	};
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await api.get("/api/admin/posts");
-
+			const response = await api.get("/api/posts?page=1&limit=6");
 			console.log(response);
 
 			if (response.status === 200) {
-				setPages(Math.ceil(response.data.count / 5));
+				setPages(Math.ceil(response.data.count / 6));
 				setPosts(response.data?.posts);
 			}
 		};
