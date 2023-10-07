@@ -10,25 +10,26 @@ function PostsPage() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [pages, setPages] = useState(1);
 	const [searchTerm, setSearchTerm] = useState("");
-	const [limit, setLimit] = useState(0);
+	const [limit, setLimit] = useState(5);
 
 	const fetchPostsByCondition = async (page = 1) => {
-		const response = await api.get(
-			`/api/admin/posts/search?page=${page}&limit=${limit}&title=${searchTerm}`
-		);
-		setCurrentPage(page);
-		setPages(Math.ceil(response.data.count / limit));
-		setPosts(response.data.posts);
+		// const response = await api.get(
+		// 	`/api/admin/posts/search?page=${page}&limit=${limit}&title=${searchTerm}`
+		// );
+		// setCurrentPage(page);
+		// setPages(Math.ceil(response.data.count / limit));
+		// setPosts(response.data.posts);
+		console.log({ page, limit });
 	};
 
 	useEffect(() => {
 		const fetchPosts = async () => {
-			const response = await api.get("/api/admin/posts");
+			const response = await api.get("/api/admin/posts?page=1&limit=5");
 
 			console.log("posts", response);
 
 			if (response.status === 200) {
-				setPages(Math.ceil(response.data.count / 5));
+				setPages(Math.ceil(response.data.count / limit));
 				setPosts(response.data?.posts);
 			}
 		};
@@ -45,6 +46,7 @@ function PostsPage() {
 		const newLimit = event.target.value;
 		setLimit(newLimit);
 	};
+	2;
 
 	const handleTitleChange = (event) => {
 		const newSearchTerm = event.target.value;

@@ -3,7 +3,6 @@ const express = require("express");
 
 const User = require("../../models/User");
 
-const router = express.Router();
 async function updateProfile(req, res) {
 	const { userId, userName, firstName, lastName, avatar } = req.body;
 
@@ -63,7 +62,7 @@ async function updatePassword(req, res) {
 
 		if (!isPasswordCorrect) {
 			return res
-				.status(401)
+				.status(203)
 				.json({ message: "Current password is incorrect" });
 		}
 

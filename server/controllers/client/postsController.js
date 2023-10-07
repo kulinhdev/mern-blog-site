@@ -447,8 +447,6 @@ async function getUserSavedLikedCounts(req, res) {
 			savedCount: user.savedPosts.length,
 		};
 
-		console.log({ savedLikedCounts });
-
 		res.status(200).json({ savedLikedCounts });
 	} catch (error) {
 		console.log({ error: error.message });

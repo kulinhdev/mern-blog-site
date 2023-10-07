@@ -8,7 +8,7 @@ const { generateSlug } = require("../../utils/common");
 async function getAllPosts(req, res) {
 	try {
 		const count = await Post.countDocuments();
-		const posts = await Post.find().sort("-createdAt");
+		const posts = await Post.find().sort("-createdAt").limit(5);
 
 		// Map the posts and add the image URLs
 		const postsWithImages = await Promise.all(
